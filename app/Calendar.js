@@ -165,6 +165,10 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
     return joursFeries.hasOwnProperty(format(day, "yyyy-MM-dd"));
   };
 
+  const getJourFeries = (day) => {
+    return joursFeries[format(day, "yyyy-MM-dd")];
+  }
+
   const calendarUI = useMemo(
     () => (
       <CustomCalendar
@@ -185,6 +189,7 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
           focus: focusedDay,
           highlighted: isJoursFeries,
           highlightedProp: { color: "red" },
+          highlightInfo:getJourFeries
         }}
         detailed={{ ...view.detailed }}
       />

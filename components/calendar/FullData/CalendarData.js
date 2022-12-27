@@ -1,13 +1,13 @@
 "use client";
 
-import { Box, Skeleton, useTheme } from "@mui/material";
+import { Box, Skeleton, Tooltip, useTheme } from "@mui/material";
 import {
   eachDayOfInterval,
   endOfMonth,
   isWeekend,
   startOfMonth,
 } from "date-fns";
-import { useContext, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { useLocalStorage } from "../../../hooks/localStorageHook";
 import {
   formatDayDate,
@@ -24,8 +24,11 @@ const minCellSize = 20;
 
 export default function CalendarData() {
   const theme = useTheme();
-  const { months, data, day:{highlighted,highlightedProp} } =
-    useContext(CalendarContext);
+  const {
+    months,
+    data,
+    day: { highlighted, highlightedProp, highlightInfo },
+  } = useContext(CalendarContext);
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, 2);
 
   const dayLimit = endOfMonth(months[months.length - 1].day);
@@ -35,18 +38,30 @@ export default function CalendarData() {
   });
 
   const daysRow = useMemo(() => {
-    return days.map((day, i) => (
-      <Day
-        day={day}
-        key={i}
-        sx={{
-          gridColumnStart: i == 0 ? 2 : "auto",
-          ...(isWeekend(day) && weekend[theme.palette.mode]),
-          ...(highlighted(day) && highlightedProp),
-        }}
-      />
-    ));
-  }, [days, highlighted,highlightedProp, theme.palette.mode]);
+    return days.map((day, i) =>
+      highlighted(day) ? (
+        <Tooltip key={i} title={highlightInfo(day)} placement="top" arrow>
+          <Day
+            day={day}
+            sx={{
+              gridColumnStart: i == 0 ? 2 : "auto",
+              ...(isWeekend(day) && weekend[theme.palette.mode]),
+              ...highlightedProp,
+            }}
+          />
+        </Tooltip>
+      ) : (
+        <Day
+          day={day}
+          key={i}
+          sx={{
+            gridColumnStart: i == 0 ? 2 : "auto",
+            ...(isWeekend(day) && weekend[theme.palette.mode]),
+          }}
+        />
+      )
+    );
+  }, [days, highlighted, highlightedProp, theme.palette.mode]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);
@@ -72,7 +87,7 @@ export default function CalendarData() {
         />
       )),
     ];
-  },[days,zoom]);
+  }, [days, zoom]);
 
   return (
     <>
@@ -82,9 +97,11 @@ export default function CalendarData() {
           gridTemplateColumns: `${10 + zoom}% repeat(${days.length},${
             minCellSize + zoom * 5
           }px)`,
-          gridTemplateRows: `1fr 1fr repeat(${data.length},${
-            minCellSize + zoom * 5
-          }px)`,
+          gridTemplateRows: `1fr 1fr ${
+            data.length
+              ? `repeat(${data.length},${minCellSize + zoom * 5}px)`
+              : ""
+          }`,
           display: "grid",
           pb: "1em",
           overflowX: "auto",
@@ -125,14 +142,16 @@ const Month = ({ month: { nbOfDays, day }, first }) => (
   </Box>
 );
 
-const Day = ({ day, sx = {} }) => (
+const Day = React.forwardRef(({ day, sx = {}, ...props }, ref) => (
   <Box
     sx={{
       textAlign: "center",
       ...sx,
     }}
+    ref={ref}
+    {...props}
   >
     <Box>{formatSimpleDayLabel(day)}</Box>
     <Box>{formatDayDate(day)}</Box>
   </Box>
-);
+));

@@ -31,6 +31,8 @@ export default function CalendarCell({
 
   const highlighted = event && eventProps.highlighted(event);
 
+  const Day = <Box sx={{ p: "0.5em" }}>{formatDayDate(date)}</Box>;
+
   return (
     <Stack
       direction="column"
@@ -42,7 +44,17 @@ export default function CalendarCell({
         ...(dayProps.highlighted(date) && dayProps.highlightedProp),
       }}
     >
-      <Box sx={{ p: "0.5em" }}>{formatDayDate(date)}</Box>
+      {dayProps.highlighted(date) ? (
+        <Tooltip
+          title={dayProps.highlightInfo(date)}
+          placement="top"
+          arrow
+        >
+          {Day}
+        </Tooltip>
+      ) : (
+        Day
+      )}
       {event && (
         <Tooltip title={eventProps.tooltip(event)} placement="bottom">
           <Box
