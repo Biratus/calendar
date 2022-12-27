@@ -11,7 +11,7 @@ import {
   Menu,
   MenuItem,
   Stack,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { addMonths, startOfMonth, startOfToday, subMonths } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";

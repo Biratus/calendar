@@ -19,13 +19,13 @@
     "axios": "^1.2.0",
     "date-fns": "^2.29.3",
     "distinct-colors": "^3.0.0",
-    "next": "^13.0.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "next": "^13.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "8.28.0",
-    "eslint-config-next": "13.0.5"
+    "eslint-config-next": "^13.1.1"
   }
 }
