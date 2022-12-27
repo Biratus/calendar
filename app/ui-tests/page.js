@@ -17,7 +17,6 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 
 export default function ThemeTest() {
   const theme = useTheme();
-console.log(theme.palette);
   const colors = [
     "ajcBlue",
     "ajcYellow",
@@ -178,7 +177,7 @@ console.log(theme.palette);
         <Stack direction="column" spacing={5}>
           {variants.map((variant) => (
             <Stack direction="row" spacing={5} key={variant}>
-              {/* {dropdowns(variant)} */}
+              {dropdowns(variant)}
             </Stack>
           ))}
         </Stack>
@@ -186,38 +185,10 @@ console.log(theme.palette);
         <Stack direction="column" spacing={5}>
           {varTxt.map((variant) => (
             <Stack direction="row" spacing={5} key={variant}>
-              {/* {textfields(variant)} */}
+              {textfields(variant)}
             </Stack>
           ))}
         </Stack>
-        {/* <Stack direction="column" spacing={5}>
-          <Stack direction="row" spacing={5}>
-            <Pagination color="ajcBlue" count={10} />
-            <Pagination color="ajcYellow" count={10} />
-          </Stack>
-          <Stack direction="row" spacing={5}>
-            <Pagination color="ajcBlue" count={10} shape="rounded" />
-            <Pagination color="ajcYellow" count={10} shape="rounded" />
-          </Stack>
-          <Stack direction="row" spacing={5}>
-            <Pagination color="ajcBlue" count={10} variant="outlined" />
-            <Pagination color="ajcYellow" count={10} variant="outlined" />
-          </Stack>
-          <Stack direction="row" spacing={5}>
-            <Pagination
-              color="ajcBlue"
-              count={10}
-              variant="outlined"
-              shape="rounded"
-            />
-            <Pagination
-              color="ajcYellow"
-              count={10}
-              variant="outlined"
-              shape="rounded"
-            />
-          </Stack>
-        </Stack> */}
       </Stack>
     </>
   );

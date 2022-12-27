@@ -1,3 +1,6 @@
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { Stack } from "@mui/material";
+
 export const FiliereView = {
   label: "Filière",
   calendarRowLabel: ({ filiere }) => filiere,
@@ -9,7 +12,11 @@ export const FiliereView = {
   },
   detailed: {
     additionalLabel: "Formateur",
-    additionalInfo: ({ formateur }) => formateur.nom + " " + formateur.prenom,
+    additionalInfo: ({ formateur }) => (
+      <Stack direction="row" alignItems="center" gap={3} sx={{height:1}}>
+        <AccountCircleIcon /> {formateur.nom + " " + formateur.prenom}
+      </Stack>
+    ),
   },
 };
 
