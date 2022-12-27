@@ -1,5 +1,4 @@
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Stack } from "@mui/material";
+import FormateurSimple from "../components/formateursSimple";
 
 export const FiliereView = {
   label: "Filière",
@@ -13,9 +12,7 @@ export const FiliereView = {
   detailed: {
     additionalLabel: "Formateur",
     additionalInfo: ({ formateur }) => (
-      <Stack direction="row" alignItems="center" gap={3} sx={{height:1}}>
-        <AccountCircleIcon /> {formateur.nom + " " + formateur.prenom}
-      </Stack>
+      <FormateurSimple formateur={formateur} />
     ),
   },
 };
