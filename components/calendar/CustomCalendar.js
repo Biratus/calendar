@@ -16,7 +16,7 @@ import CalendarSmall from "./SingleData/CalendarSmall";
 export const ColorContext = createContext();
 export const CalendarContext = createContext();
 
-export default function CustomCalendar({ data, event, day, detailed }) {
+export default function CustomCalendar({ data, event, day, detailed,view }) {
   const router = useRouter();
   const path = usePathname();
   const params = useSearchParams();
@@ -72,6 +72,7 @@ export default function CustomCalendar({ data, event, day, detailed }) {
         months,
         data: filteredData,
         detailed,
+        view
       }}
     >
       {!focused ? <CalendarData /> : <CalendarSmall data={focused} />}

@@ -2,34 +2,48 @@
 
 import { Box, Skeleton, Tooltip, useTheme } from "@mui/material";
 import {
+  addMonths,
+  areIntervalsOverlapping,
   eachDayOfInterval,
   endOfMonth,
   isWeekend,
+  parseISO,
   startOfMonth,
 } from "date-fns";
-import React, { useContext, useMemo } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { useLocalStorage } from "../../../hooks/localStorageHook";
 import {
   formatDayDate,
   formatMonthYear,
   formatSimpleDayLabel,
 } from "../../../lib/date";
-import { CalendarContext } from "../CustomCalendar";
-import { monthLabel, weekend } from "../styles/styles";
-import ZoomUI from "../ZoomUI";
+import { monthLabel, weekend } from "../../calendar/styles/styles";
+import ZoomUI from "../../calendar/ZoomUI";
 import CalendarRow from "./CalendarRow";
 
 const zoomCoefKey = "zoom_calendar_full";
 const minCellSize = 20;
 
-export default function CalendarData({context = CalendarContext}) {
+export default function FullCalendar({
+  data: originalData,
+  time: { start, monthLength },
+  event,
+  day,
+  view,
+}) {
   const theme = useTheme();
-  const {
-    months,
-    data,
-    day: { highlighted, highlightedProp, highlightInfo },
-  } = useContext(context);
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, 2);
+  const { highlighted, highlightedProp, highlightInfo } = day;
+
+  const month = parseISO(start);
+  const months = useMemo(() => makeMonths(month, monthLength), [month]);
+
+  const data = originalData.filter((d) =>
+    dataOverlapInterval(d.events, {
+      start: startOfMonth(months[0].day),
+      end: endOfMonth(months[months.length - 1].day),
+    })
+  );
 
   const dayLimit = endOfMonth(months[months.length - 1].day);
   const days = eachDayOfInterval({
@@ -89,8 +103,18 @@ export default function CalendarData({context = CalendarContext}) {
     ];
   }, [days, zoom]);
 
+  const FullCalendarContext = createContext();
+
   return (
-    <>
+    <FullCalendarContext.Provider
+      value={{
+        zoom,
+        event,
+        day,
+        days,
+        tooltipAdditionalInfo: (event) => view.tooltipAdditionalInfo(event),
+      }}
+    >
       <ZoomUI range={5} onChange={setZoom} value={zoom} />
       <Box
         sx={{
@@ -118,12 +142,12 @@ export default function CalendarData({context = CalendarContext}) {
                 key={i}
                 label={d.label}
                 events={d.events}
-                days={days}
-                context={context}
+                labelComponent={view.labelComponent(d.label)}
+                context={FullCalendarContext}
               />
             ))}
       </Box>
-    </>
+    </FullCalendarContext.Provider>
   );
 }
 
@@ -156,3 +180,18 @@ const Day = React.forwardRef(({ day, sx = {}, ...props }, ref) => (
     <Box>{formatDayDate(day)}</Box>
   </Box>
 ));
+
+const makeMonths = (month, length) => {
+  let months = [];
+  for (let i = 0; i <= length; i++) {
+    let m = addMonths(month, i);
+    months.push({ day: startOfMonth(m), nbOfDays: endOfMonth(m).getDate() });
+  }
+  return months;
+};
+
+const dataOverlapInterval = (data, interval) => {
+  return data.some(({ start, end }) =>
+    areIntervalsOverlapping({ start, end }, interval, { inclusive: true })
+  );
+};

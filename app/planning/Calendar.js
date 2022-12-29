@@ -16,20 +16,22 @@ import {
 import { addMonths, startOfMonth, startOfToday, subMonths } from "date-fns";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useReducer, useState } from "react";
-import CustomCalendar from "../components/calendar/CustomCalendar";
-import InfoTooltip from "../components/calendar/InfoTooltip";
-import Dropdown from "../components/Dropdown/Dropdown";
-import SplitModuleModal from "../components/modals/SplitModuleModal";
-import SwitchFormateurModal from "../components/modals/SwitchFormateurModal";
-import { mapISO, toCalendarData } from "../lib/calendar";
-import { getColorsForLabels } from "../lib/colors";
-import { fetchMods, splitModule, switchFormateur } from "../lib/dataAccess";
-import { format, formatMonthYear, parseMonthAndYear } from "../lib/date";
-import { searchParamsClone } from "../lib/navigation";
-import { isFormateurMissing } from "../lib/realData";
+import CustomCalendar from "../../components/calendar/CustomCalendar";
+import InfoTooltip from "../../components/calendar/InfoTooltip";
+import { missingFormateurStyle } from "../../components/calendar/styles/styles";
+import Dropdown from "../../components/Dropdown/Dropdown";
+import SplitModuleModal from "../../components/modals/SplitModuleModal";
+import SwitchFormateurModal from "../../components/modals/SwitchFormateurModal";
+import { getJoursFeries, mapISO, toCalendarData } from "../../lib/calendar";
+import { getColorsForLabels } from "../../lib/colors";
+import { fetchMods, splitModule, switchFormateur } from "../../lib/dataAccess";
+import { format, formatMonthYear, parseMonthAndYear } from "../../lib/date";
+import { searchParamsClone } from "../../lib/navigation";
+import { isFormateurMissing } from "../../lib/realData";
 import { FiliereView, FormateurView } from "./CalendarViews";
 import FastSelectMonth from "./FastSelectMonth";
 import Legend from "./Legend";
+
 
 const hoverElementsInit = {
   menuAnchor: null,
@@ -38,23 +40,12 @@ const hoverElementsInit = {
   module: null,
 };
 
-const missingFormateurStyle = (eventColor) => ({
-  background: `repeating-linear-gradient(30deg,
-    transparent,
-    ${eventColor} 20%,
-    transparent 40%)`,
-});
 
-const monthStart = startOfMonth(startOfToday());
-
-export default function Calendar({ modules: originalModules, joursFeries }) {
+export default function Calendar({month,joursFeries,modules:originalModules}) {
+  
   const theme = useTheme();
   const router = useRouter();
   const params = useSearchParams();
-
-  const focusedDay = params.get("date")
-    ? parseMonthAndYear(params.get("date"))
-    : monthStart;
 
   const [modules, setModules] = useState(parseDates(originalModules));
 
@@ -69,20 +60,12 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
     hoverElementsInit
   );
 
-  const viewActions = Object.keys(views).map((k) => {
-    return {
-      label: views[k].label,
-      onClick: () => replaceRoute({ view: k }),
-      selected: view == views[k],
-    };
-  });
-
   // Transform module to filiere map
   const calendarData = toCalendarData(modules, view.calendarRowLabel);
 
   const themeList = calendarData.flatMap((d) => d.events).map((e) => e.theme);
 
-  const colors = getColorsForLabels(themeList, theme.palette.mode);
+  const colors = getColorsForLabels(themeList);
 
   const eventClick = (event, ref) => {
     hoverDispatch({ type: "OPEN", value: { anchor: ref, module: event } });
@@ -94,22 +77,6 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
 
   const reloadModules = async () => {
     setModules(parseDates(await fetchMods()));
-  };
-
-  const monthNavigation = ({ type, value }) => {
-    let newMonth;
-    switch (type) {
-      case "NEXT_MONTH":
-        newMonth = addMonths(focusedDay, 1);
-        break;
-      case "PREV_MONTH":
-        newMonth = subMonths(focusedDay, 1);
-        break;
-      case "SET_MONTH":
-        newMonth = startOfMonth(value);
-        break;
-    }
-    replaceRoute({ date: formatMonthYear(newMonth) });
   };
 
   const submitSwitchForm = async (newModule) => {
@@ -126,15 +93,6 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
 
     reloadModules();
     return true;
-  };
-
-  const replaceRoute = (additionalParams) => {
-    let newParams = searchParamsClone(params);
-
-    for (let k in additionalParams) {
-      newParams.set(k, additionalParams[k]);
-    }
-    router.replace("?" + newParams.toString());
   };
 
   const eventMenu = (
@@ -186,11 +144,12 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
           highlightedProp: missingFormateurStyle,
         }}
         day={{
-          focus: focusedDay,
+          focus: month,
           highlighted: isJoursFeries,
           highlightedProp: { color: "red" },
           highlightInfo:getJourFeries
         }}
+        view={view}
         detailed={{ ...view.detailed }}
       />
     ),
@@ -207,7 +166,7 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
 
   return (
     <>
-      <Stack direction="row" spacing={2} m={1} justifyContent="center">
+      {/* <Stack direction="row" spacing={2} m={1} justifyContent="center">
         <Dropdown
           label="Changer de vue"
           actions={viewActions}
@@ -216,7 +175,7 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
           disabled={Boolean(params.get("focus"))}
         />
         <FastSelectMonth
-          focusedMonth={focusedDay}
+          focusedMonth={month}
           onChange={(value) => monthNavigation({ type: "SET_MONTH", value })}
           color="ajcBlue"
           variant="outlined"
@@ -237,7 +196,7 @@ export default function Calendar({ modules: originalModules, joursFeries }) {
         >
           Mois suivant
         </Button>
-      </Stack>
+      </Stack> */}
       {calendarUI}
       <Legend legendList={legendList} />
       {hoverProps.module && hoverProps.switchModal && (

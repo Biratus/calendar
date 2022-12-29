@@ -1,11 +1,10 @@
 "use client";
 
-import { Tooltip, Typography, useTheme } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import { isWeekend } from "date-fns";
 import { useContext } from "react";
-import { CalendarContext } from "../CustomCalendar";
-import { day, weekend } from "../styles/styles";
+import { day, weekend } from "../../calendar/styles/styles";
 
 const style = {
   display: "flex",
@@ -20,16 +19,15 @@ const style = {
   },
 };
 
-export default function CalendarEvent({ day: { date, event } ,context}) {
+export default function CalendarEvent({
+  day: { date, event },
+  Tooltip,
+  context,
+}) {
   const theme = useTheme();
-  const { event: eventProps } = useContext(context);
   const {
-    tooltip,
-    color,
-    onClick,
-    highlighted: eventHighlighted,
-    highlightedProp,
-  } = eventProps;
+    event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
+  } = useContext(context);
 
   const commonClasses = {
     ...day,
@@ -39,7 +37,7 @@ export default function CalendarEvent({ day: { date, event } ,context}) {
   const highlighted = event && eventHighlighted(event);
 
   return (
-    <Tooltip title={tooltip(event)} placement="bottom">
+    <Tooltip placement="bottom">
       <Box
         sx={{
           ...style,

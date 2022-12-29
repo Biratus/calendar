@@ -39,3 +39,10 @@ export const backgroundFor = (date, event,color) => {
     }
   };
   
+
+export const missingFormateurStyle = (eventColor) => ({
+  background: `repeating-linear-gradient(30deg,
+    transparent,
+    ${eventColor} 20%,
+    transparent 40%)`,
+});

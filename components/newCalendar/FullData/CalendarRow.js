@@ -3,40 +3,37 @@
 import { Box, Tooltip, Typography, useTheme } from "@mui/material";
 import { eachDayOfInterval, isWeekend, isWithinInterval } from "date-fns";
 import { useContext } from "react";
-import { CalendarContext } from "../CustomCalendar";
-import { day as dayStyle, weekend } from "../styles/styles";
+import InfoTooltip from "../../calendar/InfoTooltip";
+import { weekend, day as dayStyle} from "../../calendar/styles/styles";
 import CalendarEvent from "./CalendarEvent";
 
-const labelStyle = {
-  display: "flex",
-  alignItems: "center",
-  position: "sticky",
-  left: "0",
-  alignSelf: "auto",
-  color: "ajcBlue.contrastText",
-  backgroundColor: "ajcBlue.main",
-  cursor: "pointer",
-  paddingLeft: "0.5em",
-  zIndex: 1,
-  "&:hover": {
-    backgroundColor: "ajcBlue.dark",
-  },
-};
-export default function CalendarRow({ label = "###", days, events,context }) {
+export default function CalendarRow({
+  label,
+  events,
+  labelComponent,
+  context,
+}) {
   const theme = useTheme();
-  const { focusData,view } = useContext(context);
+  const {tooltipAdditionalInfo,days} = useContext(context);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
       <Tooltip title={label} arrow placement="right">
-      {view.calendarRowLabelComponent(label)}
-        {/* <Box sx={labelStyle} onClick={() => focusData(label)}>
-          <Typography noWrap>{label}</Typography>
-        </Box> */}
+        {labelComponent}
       </Tooltip>
       {daysAndEvents.map((day, id) => {
         return day.event ? (
-          <CalendarEvent day={day} key={id} context={context}/>
+          <CalendarEvent
+            day={day}
+            key={id}
+            context={context}
+            Tooltip={({ children,...props}) => (
+              <InfoTooltip
+                tooltipProps={{...props}}
+                titleProps={{...day.event,additionalInfos:tooltipAdditionalInfo(day.event)}}
+              >{children}</InfoTooltip>
+            )}
+          />
         ) : (
           <Cell
             key={id}
