@@ -4,9 +4,10 @@ import {
   eachDayOfInterval,
   endOfMonth,
   isWithinInterval,
+  parseISO,
   startOfMonth
 } from "date-fns";
-import { createContext } from "react";
+import { createContext, useMemo, useState } from "react";
 import { makeMonths } from "../../../lib/calendar";
 import CalendarMonth from "./CalendarMonth";
 
@@ -20,16 +21,16 @@ export default function CalendarSimple({
   events,
   zoom,
   eventProps,
-  dayProps
+  dayProps,
+  sx
 }) {
   const months = useMemo(
-    () => makeMonths(start, monthLength),
+    () => makeMonths(parseISO(start), monthLength),
     [start, monthLength]
   );
   const [hover, setHover] = useState();
 
-  const daysAndEventsOf = ({ day }) =>
-    mergeDaysAndEvent(
+  const daysAndEventsOf = ({ day }) => mergeDaysAndEvent(
       eachDayOfInterval({
         start: startOfMonth(day),
         end: endOfMonth(day),
@@ -40,7 +41,7 @@ export default function CalendarSimple({
   return (
     <Box
       sx={{
-        width: view.width,
+        ...sx,
         display: "grid",
         gridTemplateColumns: "repeat(7,calc(100%/7))",
       }}

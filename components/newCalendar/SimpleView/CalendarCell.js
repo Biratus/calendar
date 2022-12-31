@@ -3,6 +3,8 @@
 import { Box, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { isSameDay, isWeekend } from "date-fns";
 import { useContext } from "react";
+import { formatDayDate } from "../../../lib/date";
+import { backgroundFor, day, weekend } from "../../calendar/styles/styles";
 
 const cellStyle = {
   pl: 2,
@@ -14,17 +16,25 @@ const cellStyle = {
 
 export default function CalendarCell({
   day: { date, event },
-  context
+  Tooltip: EventTooltip = <></>,
+  context,
 }) {
   const theme = useTheme();
-  const { hover,setHover,cellHeight:height,event: eventProps, day: dayProps } = useContext(context);
+  const {
+    hover,
+    setHover,
+    cellHeight: height,
+    event: eventProps,
+    day: dayProps,
+  } = useContext(context);
 
   const gridColumnStart = () => {
     if (date.getDate() != 1) return "auto";
     return date.getDay() || 7;
   };
 
-  const highlighted = event && eventProps.highlighted(event);
+  const highlighted =
+    event && eventProps.highlighted && eventProps.highlighted(event);
 
   const Day = <Box sx={{ p: "0.5em" }}>{formatDayDate(date)}</Box>;
 
@@ -40,18 +50,14 @@ export default function CalendarCell({
       }}
     >
       {dayProps.highlighted(date) ? (
-        <Tooltip
-          title={dayProps.highlightInfo(date)}
-          placement="top"
-          arrow
-        >
+        <Tooltip title={dayProps.highlightInfo(date)} placement="top" arrow>
           {Day}
         </Tooltip>
       ) : (
         Day
       )}
       {event && (
-        <Tooltip title={eventProps.tooltip(event)} placement="bottom">
+        <EventTooltip event={event} placement="bottom">
           <Box
             sx={{
               ...cellStyle,
@@ -72,7 +78,7 @@ export default function CalendarCell({
               {isSameDay(event.start, date) && event.label}
             </Typography>
           </Box>
-        </Tooltip>
+        </EventTooltip>
       )}
     </Stack>
   );

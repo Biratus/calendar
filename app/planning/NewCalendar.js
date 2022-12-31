@@ -199,7 +199,6 @@ function CalendarFormateur({
     FormateurView,
     true,
   );
-  console.log({calendarData})
   return (
     <>
       <FullCalendar
