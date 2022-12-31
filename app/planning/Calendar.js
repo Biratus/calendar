@@ -61,7 +61,7 @@ export default function Calendar({month,joursFeries,modules:originalModules}) {
   );
 
   // Transform module to filiere map
-  const calendarData = toCalendarData(modules, view.calendarRowLabel);
+  const calendarData = toCalendarData(modules,view.calendarRowLabel);
 
   const themeList = calendarData.flatMap((d) => d.events).map((e) => e.theme);
 

@@ -117,6 +117,7 @@ export default function CalendarData({context = CalendarContext}) {
               <CalendarRow
                 key={i}
                 label={d.label}
+                labelProps={{title:d.labelTitle,comp:d.labelComp}}
                 events={d.events}
                 days={days}
                 context={context}

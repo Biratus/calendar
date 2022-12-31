@@ -12,7 +12,11 @@ import SwitchFormateurModal from "../../components/modals/SwitchFormateurModal";
 import FullCalendar from "../../components/newCalendar/FullData/CalendarData";
 import PopUpMenu from "../../components/PopUpMenu/PopUpMenu";
 import { toCalendarData } from "../../lib/calendar";
-import { getColorsForLabels, missingFormateurLegend } from "../../lib/colors";
+import {
+  colorListFromModules,
+  getColorsForLabels,
+  missingFormateurLegend,
+} from "../../lib/colors";
 import { splitModule, switchFormateur } from "../../lib/dataAccess";
 import { format } from "../../lib/date";
 import { isFormateurMissing } from "../../lib/realData";
@@ -51,7 +55,9 @@ export default function CommonCalendar({
       onClick: () => hoverDispatch({ type: "SPLIT_MODULE" }),
     },
   ];
-  const [legendList, colors] = colorListFromModules(modules, [missingFormateurLegend]);
+  const [legendList, colors] = colorListFromModules(modules, [
+    missingFormateurLegend,
+  ]);
 
   const closeModals = () => {
     hoverDispatch({ type: "CLOSE_MODAL" });
@@ -154,7 +160,8 @@ function CalendarFiliere({
 }) {
   const calendarData = toCalendarData(
     modules,
-    FiliereView.calendarRowLabel,
+    "filiere",
+    FiliereView,
     true
   );
 
@@ -188,9 +195,11 @@ function CalendarFormateur({
 }) {
   const calendarData = toCalendarData(
     modules.filter((m) => !isFormateurMissing(m)),
-    FormateurView.calendarRowLabel,
-    true
+    'formateur.mail',
+    FormateurView,
+    true,
   );
+  console.log({calendarData})
   return (
     <>
       <FullCalendar

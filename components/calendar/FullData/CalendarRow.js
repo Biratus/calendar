@@ -22,14 +22,14 @@ const labelStyle = {
     backgroundColor: "ajcBlue.dark",
   },
 };
-export default function CalendarRow({ label = "###", days, events,context }) {
+export default function CalendarRow({ label = "###", days, events,context,labelProps:{title:labelTitle,comp:labelComp} }) {
   const theme = useTheme();
   const { focusData,view } = useContext(context);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
-      <Tooltip title={label} arrow placement="right">
-      {view.calendarRowLabelComponent(label)}
+      <Tooltip title={labelTitle} arrow placement="right">
+      {labelComp}
         {/* <Box sx={labelStyle} onClick={() => focusData(label)}>
           <Typography noWrap>{label}</Typography>
         </Box> */}

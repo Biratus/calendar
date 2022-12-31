@@ -19,7 +19,11 @@ const labelStyle = {
 };
 export const FiliereView = {
   label: "Filière",
-  calendarRowLabel: ({ filiere }) => filiere,
+  keyObject: ({ filiere }) => filiere,
+  labelTitle: (f) => f,
+  labelComponent: (filiere) => (
+    <RowLabel label={filiere} href={`filiere/${filiere}`} />
+  ),
   tooltipAdditionalInfo: ({ formateur }) => {
     return {
       label: "Formateur",
@@ -32,15 +36,15 @@ export const FiliereView = {
       <FormateurSimple formateur={formateur} />
     ),
   },
-  labelComponent:(label) => (
-    <RowLabel label={label} href="filiere" />
-  )
 };
 
 export const FormateurView = {
   label: "Formateur",
-  calendarRowLabel: ({ formateur }) =>
-    `${formateur.nom} ${formateur.prenom} [${formateur.mail}]`,
+  keyObject: ({ formateur }) => formateur,
+  labelTitle: ({ nom, prenom, mail }) => `${nom} ${prenom} [${mail}]`,
+  labelComponent: ({ nom, prenom, mail }) => (
+    <RowLabel label={`${nom} ${prenom} [${mail}]`} href={`formateur/${mail}`} />
+  ),
   tooltipAdditionalInfo: ({ filiere }) => {
     return {
       label: "Filière",
@@ -51,9 +55,6 @@ export const FormateurView = {
     additionalLabel: "Filière",
     additionalInfo: ({ filiere }) => filiere,
   },
-  labelComponent:(label) => (
-    <RowLabel label={label} href="formateur" />
-  )
 };
 
 const RowLabel = React.forwardRef(({ href, label, ...props }, ref) => (
@@ -61,7 +62,8 @@ const RowLabel = React.forwardRef(({ href, label, ...props }, ref) => (
     <Typography noWrap>
       <Link
         style={{ textDecoration: "none", color: "inherit" }}
-        href={`planning/${href}/${label}`}
+        href={`planning/${href}`}
+        prefetch={false}
       >
         {label}
       </Link>

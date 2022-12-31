@@ -12,6 +12,7 @@ import {
 } from "date-fns";
 import React, { createContext, useContext, useMemo } from "react";
 import { useLocalStorage } from "../../../hooks/localStorageHook";
+import { makeMonths } from "../../../lib/calendar";
 import {
   formatDayDate,
   formatMonthYear,
@@ -140,9 +141,8 @@ export default function FullCalendar({
           : data.map((d, i) => (
               <CalendarRow
                 key={i}
-                label={d.label}
                 events={d.events}
-                labelComponent={view.labelComponent(d.label)}
+                labelProps={{title:d.labelTitle,comp:d.labelComponent}}
                 context={FullCalendarContext}
               />
             ))}
@@ -181,14 +181,6 @@ const Day = React.forwardRef(({ day, sx = {}, ...props }, ref) => (
   </Box>
 ));
 
-const makeMonths = (month, length) => {
-  let months = [];
-  for (let i = 0; i <= length; i++) {
-    let m = addMonths(month, i);
-    months.push({ day: startOfMonth(m), nbOfDays: endOfMonth(m).getDate() });
-  }
-  return months;
-};
 
 const dataOverlapInterval = (data, interval) => {
   return data.some(({ start, end }) =>

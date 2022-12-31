@@ -8,9 +8,8 @@ import { weekend, day as dayStyle} from "../../calendar/styles/styles";
 import CalendarEvent from "./CalendarEvent";
 
 export default function CalendarRow({
-  label,
   events,
-  labelComponent,
+  labelProps:{title:lableTitle,comp:labelComponent},
   context,
 }) {
   const theme = useTheme();
@@ -18,7 +17,7 @@ export default function CalendarRow({
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
-      <Tooltip title={label} arrow placement="right">
+      <Tooltip title={lableTitle} arrow placement="right">
         {labelComponent}
       </Tooltip>
       {daysAndEvents.map((day, id) => {
