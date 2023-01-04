@@ -2,6 +2,10 @@ import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import FormateurSimple from "../../components/formateursSimple";
+import EventTooltip from "../../components/newCalendar/EventTooltip";
+
+const formateurSimple = ({ nom, prenom, mail }) => `${nom} ${prenom} - ${mail}`;
+
 const labelStyle = {
   display: "flex",
   alignItems: "center",
@@ -36,6 +40,7 @@ export const FiliereView = {
       <FormateurSimple formateur={formateur} />
     ),
   },
+  eventTooltip: (id,event,children) => <FormateurTooltip key={id} event={event}>{children}</FormateurTooltip>,
 };
 
 export const FormateurView = {
@@ -43,8 +48,12 @@ export const FormateurView = {
   keyObject: ({ formateur }) => formateur,
   labelTitle: ({ nom, prenom, mail }) => `${nom} ${prenom} [${mail}]`,
   labelComponent: ({ nom, prenom, mail }) => (
-    <RowLabel label={`${nom} ${prenom} [${mail}]`} href={`formateur/${mail}`} />
+    <RowLabel
+      label={formateurSimple({ nom, prenom, mail })}
+      href={`formateur/${mail}`}
+    />
   ),
+  eventTooltip: <FiliereTooltip/>,
   tooltipAdditionalInfo: ({ filiere }) => {
     return {
       label: "Filière",
@@ -56,6 +65,30 @@ export const FormateurView = {
     additionalInfo: ({ filiere }) => filiere,
   },
 };
+
+function FiliereTooltip({ event, children }) {
+  return (
+    <EventTooltip
+      event={event}
+      additionalInfos={{ label: "Filière", value: event.filiere }}
+    >
+      {children}
+    </EventTooltip>
+  );
+}
+function FormateurTooltip({ event, children }) {
+  return (
+    <EventTooltip
+      event={event}
+      additionalInfos={{
+        label: "Formateur",
+        value: formateurSimple(event.formateur),
+      }}
+    >
+      {children}
+    </EventTooltip>
+  );
+}
 
 const RowLabel = React.forwardRef(({ href, label, ...props }, ref) => (
   <Box sx={labelStyle} {...props} ref={ref}>

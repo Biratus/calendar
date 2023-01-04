@@ -83,39 +83,33 @@ export default function CommonCalendar({
     return true;
   };
 
+  const commonProps = {
+    modules,
+    time: { start: month, monthLength },
+    event: {
+      color: (evt) => colors[evt.theme],
+      onClick: (event, ref) =>
+        hoverDispatch({
+          type: "OPEN",
+          value: { anchor: ref, module: event },
+        }),
+      highlighted: isFormateurMissing,
+      highlightedProp: missingFormateurStyle,
+    },
+    day: {
+      highlighted: (day) => isJoursFeries(joursFeries, day),
+      highlightedProp: { color: "red" },
+      highlightInfo: (day) => getJourFeries(joursFeries, day),
+    },
+  };
+
   const calendarFiliere = useMemo(
-    () => (
-      <CalendarFiliere
-        legend={colors}
-        modules={modules}
-        month={month}
-        joursFeries={joursFeries}
-        eventClick={(event, ref) =>
-          hoverDispatch({
-            type: "OPEN",
-            value: { anchor: ref, module: event },
-          })
-        }
-      />
-    ),
+    () => <CalendarFiliere {...commonProps} />,
     [modules, month]
   );
 
   const calendarFormateur = useMemo(
-    () => (
-      <CalendarFormateur
-        legend={colors}
-        modules={modules}
-        month={month}
-        joursFeries={joursFeries}
-        eventClick={(event, ref) =>
-          hoverDispatch({
-            type: "OPEN",
-            value: { anchor: ref, module: event },
-          })
-        }
-      />
-    ),
+    () => <CalendarFormateur {...commonProps} />,
     [modules, month]
   );
 
@@ -150,73 +144,22 @@ export default function CommonCalendar({
   );
 }
 
-function CalendarFiliere({
-  modules,
-  month,
-  joursFeries,
-  monthLength = 3,
-  eventClick,
-  legend,
-}) {
-  const calendarData = toCalendarData(
-    modules,
-    "filiere",
-    FiliereView,
-    true
-  );
+function CalendarFiliere({ modules,event, ...props }) {
+  const calendarData = toCalendarData(modules, "filiere", FiliereView, true);
 
-  return (
-    <FullCalendar
-      data={calendarData}
-      time={{ start: month, monthLength }}
-      event={{
-        color: (evt) => legend[evt.theme],
-        onClick: eventClick,
-        highlighted: isFormateurMissing,
-        highlightedProp: missingFormateurStyle,
-      }}
-      day={{
-        highlighted: (day) => isJoursFeries(joursFeries, day),
-        highlightedProp: { color: "red" },
-        highlightInfo: (day) => getJourFeries(joursFeries, day),
-      }}
-      view={FiliereView}
-    />
-  );
+  return <FullCalendar data={calendarData} event={{tooltip:FiliereView.eventTooltip,...event}}  {...props} />;
 }
 
-function CalendarFormateur({
-  modules,
-  month,
-  joursFeries,
-  monthLength = 3,
-  eventClick,
-  legend,
-}) {
+function CalendarFormateur({ modules, event,...props }) {
   const calendarData = toCalendarData(
     modules.filter((m) => !isFormateurMissing(m)),
-    'formateur.mail',
+    "formateur.mail",
     FormateurView,
-    true,
+    true
   );
   return (
     <>
-      <FullCalendar
-        data={calendarData}
-        time={{ start: month, monthLength }}
-        event={{
-          color: (evt) => legend[evt.theme],
-          onClick: eventClick,
-          highlighted: isFormateurMissing,
-          highlightedProp: missingFormateurStyle,
-        }}
-        day={{
-          highlighted: (day) => isJoursFeries(joursFeries, day),
-          highlightedProp: { color: "red" },
-          highlightInfo: (day) => getJourFeries(joursFeries, day),
-        }}
-        view={FormateurView}
-      />
+      <FullCalendar data={calendarData} event={{tooltip:FormateurView.eventTooltip,...event}} {...props} />
     </>
   );
 }

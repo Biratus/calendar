@@ -19,11 +19,7 @@ const style = {
   },
 };
 
-export default function CalendarEvent({
-  day: { date, event },
-  Tooltip,
-  context,
-}) {
+export default function CalendarEvent({ day: { date, event }, context }) {
   const theme = useTheme();
   const {
     event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
@@ -37,21 +33,19 @@ export default function CalendarEvent({
   const highlighted = event && eventHighlighted(event);
 
   return (
-    <Tooltip placement="bottom">
-      <Box
-        sx={{
-          ...style,
-          ...commonClasses,
-          background: `radial-gradient(circle, ${color(
-            event
-          )} 30%, rgba(148,187,233,0) 100%)`,
-          ...(highlighted && highlightedProp(color(event))),
-          gridColumnEnd: `span ${event.duration}`,
-        }}
-        onClick={(evt) => onClick(event, evt.currentTarget)}
-      >
-        {event.duration > 1 && <Typography noWrap>{event.label}</Typography>}
-      </Box>
-    </Tooltip>
+    <Box
+      sx={{
+        ...style,
+        ...commonClasses,
+        background: `radial-gradient(circle, ${color(
+          event
+        )} 30%, rgba(148,187,233,0) 100%)`,
+        ...(highlighted && highlightedProp(color(event))),
+        gridColumnEnd: `span ${event.duration}`,
+      }}
+      onClick={(evt) => onClick(event, evt.currentTarget)}
+    >
+      {event.duration > 1 && <Typography noWrap>{event.label}</Typography>}
+    </Box>
   );
 }

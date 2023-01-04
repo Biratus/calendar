@@ -1,19 +1,18 @@
 "use client";
 
-import { Box, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, Tooltip, useTheme } from "@mui/material";
 import { eachDayOfInterval, isWeekend, isWithinInterval } from "date-fns";
 import { useContext } from "react";
-import InfoTooltip from "../../calendar/InfoTooltip";
-import { weekend, day as dayStyle} from "../../calendar/styles/styles";
+import { day as dayStyle, weekend } from "../../calendar/styles/styles";
 import CalendarEvent from "./CalendarEvent";
 
 export default function CalendarRow({
   events,
-  labelProps:{title:lableTitle,comp:labelComponent},
+  labelProps: { title: lableTitle, comp: labelComponent },
   context,
 }) {
   const theme = useTheme();
-  const {tooltipAdditionalInfo,days} = useContext(context);
+  const { event, days } = useContext(context);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
@@ -22,17 +21,7 @@ export default function CalendarRow({
       </Tooltip>
       {daysAndEvents.map((day, id) => {
         return day.event ? (
-          <CalendarEvent
-            day={day}
-            key={id}
-            context={context}
-            Tooltip={({ children,...props}) => (
-              <InfoTooltip
-                tooltipProps={{...props}}
-                titleProps={{...day.event,additionalInfos:tooltipAdditionalInfo(day.event)}}
-              >{children}</InfoTooltip>
-            )}
-          />
+          <CalendarEvent day={day} key={id} context={context} />
         ) : (
           <Cell
             key={id}

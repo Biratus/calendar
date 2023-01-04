@@ -30,7 +30,6 @@ export default function FullCalendar({
   time: { start, monthLength },
   event,
   day,
-  view,
 }) {
   const theme = useTheme();
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, 2);
@@ -55,24 +54,15 @@ export default function FullCalendar({
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
       highlighted(day) ? (
-        <Tooltip key={i} title={highlightInfo(day)} placement="top" arrow>
-          <Day
-            day={day}
-            sx={{
-              gridColumnStart: i == 0 ? 2 : "auto",
-              ...(isWeekend(day) && weekend[theme.palette.mode]),
-              ...highlightedProp,
-            }}
-          />
-        </Tooltip>
+        <SpecialDay key={i} day={day} specialLabel={highlightInfo(day)} specialStyle={{
+          ...(isWeekend(day) && weekend[theme.palette.mode]),
+          ...highlightedProp,}} first={i == 0}/>
       ) : (
         <Day
-          day={day}
           key={i}
-          sx={{
-            gridColumnStart: i == 0 ? 2 : "auto",
-            ...(isWeekend(day) && weekend[theme.palette.mode]),
-          }}
+          first={i == 0}
+          day={day}
+          sx={{ ...(isWeekend(day) && weekend[theme.palette.mode]) }}
         />
       )
     );
@@ -105,7 +95,6 @@ export default function FullCalendar({
   }, [days, zoom]);
 
   const FullCalendarContext = createContext();
-
   return (
     <FullCalendarContext.Provider
       value={{
@@ -113,7 +102,6 @@ export default function FullCalendar({
         event,
         day,
         days,
-        tooltipAdditionalInfo: (event) => view.tooltipAdditionalInfo(event),
       }}
     >
       <ZoomUI range={5} onChange={setZoom} value={zoom} />
@@ -142,7 +130,7 @@ export default function FullCalendar({
               <CalendarRow
                 key={i}
                 events={d.events}
-                labelProps={{title:d.labelTitle,comp:d.labelComponent}}
+                labelProps={{ title: d.labelTitle, comp: d.labelComponent }}
                 context={FullCalendarContext}
               />
             ))}
@@ -151,26 +139,29 @@ export default function FullCalendar({
   );
 }
 
-const Month = ({ month: { nbOfDays, day }, first }) => (
-  <Box
-    component="div"
-    sx={{
-      ...monthLabel,
-      gridColumnEnd: `span ${nbOfDays}`,
-      gridColumnStart: first ? 2 : "auto",
-      pl: "1em",
-      display: "flex",
-      alignItems: "center",
-    }}
-  >
-    {formatMonthYear(day)}
-  </Box>
-);
+function Month({ month: { nbOfDays, day }, first }) {
+  return (
+    <Box
+      component="div"
+      sx={{
+        ...monthLabel,
+        gridColumnEnd: `span ${nbOfDays}`,
+        gridColumnStart: first ? 2 : "auto",
+        pl: "1em",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      {formatMonthYear(day)}
+    </Box>
+  );
+}
 
-const Day = React.forwardRef(({ day, sx = {}, ...props }, ref) => (
+const Day = React.forwardRef(({ day, first, sx = {}, ...props }, ref) => (
   <Box
     sx={{
       textAlign: "center",
+      gridColumnStart: first ? 2 : "auto",
       ...sx,
     }}
     ref={ref}
@@ -181,6 +172,17 @@ const Day = React.forwardRef(({ day, sx = {}, ...props }, ref) => (
   </Box>
 ));
 
+function SpecialDay({day,specialLabel,specialStyle,first}) {
+  return (
+    <Tooltip title={specialLabel} placement="top" arrow>
+      <Day
+        first={first}
+        day={day}
+        sx={{...specialStyle}}
+      />
+    </Tooltip>
+  );
+}
 
 const dataOverlapInterval = (data, interval) => {
   return data.some(({ start, end }) =>

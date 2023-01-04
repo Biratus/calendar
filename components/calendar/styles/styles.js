@@ -23,7 +23,6 @@ export const weekend = {
     }
 }
 
-
 export const backgroundFor = (date, event,color) => {
     let isStart = isSameDay(date, event.start);
     let isEnd = isSameDay(date, event.end);
