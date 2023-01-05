@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import FormateurSimple from "../../components/formateursSimple";
-import EventTooltip from "../../components/newCalendar/EventTooltip";
+import FormateurSimple from "../../../components/formateursSimple";
+import EventTooltip from "../../../components/newCalendar/EventTooltip";
 
 const formateurSimple = ({ nom, prenom, mail }) => `${nom} ${prenom} - ${mail}`;
 
@@ -40,7 +40,11 @@ export const FiliereView = {
       <FormateurSimple formateur={formateur} />
     ),
   },
-  eventTooltip: (id,event,children) => <FormateurTooltip key={id} event={event}>{children}</FormateurTooltip>,
+  eventTooltip: (id, event, children) => (
+    <FormateurTooltip key={id} event={event}>
+      {children}
+    </FormateurTooltip>
+  ),
 };
 
 export const FormateurView = {
@@ -53,7 +57,7 @@ export const FormateurView = {
       href={`formateur/${mail}`}
     />
   ),
-  eventTooltip: <FiliereTooltip/>,
+  eventTooltip: <FiliereTooltip />,
   tooltipAdditionalInfo: ({ filiere }) => {
     return {
       label: "Filière",

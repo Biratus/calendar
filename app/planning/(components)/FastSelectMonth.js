@@ -1,7 +1,7 @@
 import { addMonths, isSameMonth, subMonths } from "date-fns";
 import { useMemo } from "react";
-import Dropdown from "../../components/Dropdown/Dropdown";
-import { formatMonthYear } from "../../lib/date";
+import Dropdown from "../../../components/Dropdown/Dropdown";
+import { formatMonthYear } from "../../../lib/date";
 export default function FastSelectMonth({
   focusedMonth,
   min = 12,

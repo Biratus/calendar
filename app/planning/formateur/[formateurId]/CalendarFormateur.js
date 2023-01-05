@@ -2,13 +2,11 @@
 import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 import { Button, Stack, Typography } from "@mui/material";
-import { format } from "date-fns";
-import { missingFormateurStyle } from "../../../../components/calendar/styles/styles";
 import ZoomUI from "../../../../components/calendar/ZoomUI";
 import CalendarSimple from "../../../../components/newCalendar/SimpleView/CalendarSimple";
 import { useLocalStorage } from "../../../../hooks/localStorageHook";
 import { mapISO } from "../../../../lib/calendar";
-import { isFormateurMissing } from "../../../../lib/realData";
+import { getJourFeries, isJoursFeries } from "../../../../lib/date";
 import { FormateurView } from "../../CalendarViews";
 
 const viewWidth = 0.5;
@@ -62,11 +60,3 @@ export default function CalendarFormateur({
     </Stack>
   );
 }
-
-const isJoursFeries = (joursFeries, day) => {
-  return joursFeries.hasOwnProperty(format(day, "yyyy-MM-dd"));
-};
-
-const getJourFeries = (joursFeries, day) => {
-  return joursFeries[format(day, "yyyy-MM-dd")];
-};

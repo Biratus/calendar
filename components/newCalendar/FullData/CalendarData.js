@@ -35,7 +35,7 @@ export default function FullCalendar({
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, 2);
   const { highlighted, highlightedProp, highlightInfo } = day;
 
-  const month = parseISO(start);
+  const month = start;
   const months = useMemo(() => makeMonths(month, monthLength), [month]);
 
   const data = originalData.filter((d) =>
