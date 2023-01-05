@@ -16,11 +16,16 @@ const hoverElementsInit = {
   module: null,
 };
 
-export default function CalendarProvider({ joursFeries, children }) {
+
+// Stuff to handle pop over components (menu, modals)
+export default function CalendarProvider({ joursFeries, themes, children }) {
+  // Menu State
   const [hoverProps, hoverDispatch] = useReducer(
     hoverReducer,
     hoverElementsInit
   );
+
+  // Menu Stuffs
   const menuItems = [
     {
       icon: <SwapHorizIcon />,

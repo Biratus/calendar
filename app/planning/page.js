@@ -3,7 +3,7 @@ import { parseMonthAndYear } from "../../lib/date";
 import { modules } from "../../lib/realData";
 import MonthNavigation from "./(components)/MonthNavigation";
 import MonthNavigationProvider from "./(components)/MonthNavigationProvider";
-import CommonCalendar from "./(components)/NewCalendar";
+import CommonCalendar from "./(components)/Calendar";
 import ViewDropdown from "./(components)/ViewDropdown";
 
 const monthStart = startOfMonth(startOfToday());
