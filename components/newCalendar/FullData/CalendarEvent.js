@@ -3,7 +3,7 @@
 import { Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import { isWeekend } from "date-fns";
-import { useContext } from "react";
+import { forwardRef, useContext } from "react";
 import { day, weekend } from "../../calendar/styles/styles";
 
 const style = {
@@ -19,7 +19,7 @@ const style = {
   },
 };
 
-export default function CalendarEvent({ day: { date, event }, context }) {
+const CalendarEvent = forwardRef(({ day: { date, event }, context,...props },ref) => {
   const theme = useTheme();
   const {
     event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
@@ -34,6 +34,7 @@ export default function CalendarEvent({ day: { date, event }, context }) {
 
   return (
     <Box
+    ref={ref}
       sx={{
         ...style,
         ...commonClasses,
@@ -44,8 +45,12 @@ export default function CalendarEvent({ day: { date, event }, context }) {
         gridColumnEnd: `span ${event.duration}`,
       }}
       onClick={(evt) => onClick(event, evt.currentTarget)}
+      {...props}
     >
       {event.duration > 1 && <Typography noWrap>{event.label}</Typography>}
     </Box>
   );
 }
+);
+
+export default CalendarEvent;

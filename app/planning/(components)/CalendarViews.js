@@ -40,11 +40,7 @@ export const FiliereView = {
       <FormateurSimple formateur={formateur} />
     ),
   },
-  eventTooltip: (id, event, children) => (
-    <FormateurTooltip key={id} event={event}>
-      {children}
-    </FormateurTooltip>
-  ),
+  EventTooltip: FormateurTooltip,
 };
 
 export const FormateurView = {
@@ -57,7 +53,7 @@ export const FormateurView = {
       href={`formateur/${mail}`}
     />
   ),
-  eventTooltip: <FiliereTooltip />,
+  EventTooltip: FiliereTooltip,
   tooltipAdditionalInfo: ({ filiere }) => {
     return {
       label: "Filière",
@@ -80,7 +76,7 @@ function FiliereTooltip({ event, children }) {
     </EventTooltip>
   );
 }
-function FormateurTooltip({ event, children }) {
+export function FormateurTooltip({ event, children }) {
   return (
     <EventTooltip
       event={event}

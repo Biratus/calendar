@@ -55,7 +55,7 @@ function CalendarFiliere({ modules, event, ...props }) {
   return (
     <FullCalendar
       data={calendarData}
-      event={{ tooltip: FiliereView.eventTooltip, ...event }}
+      event={{ EventTooltip: FiliereView.EventTooltip, ...event }}
       {...props}
     />
   );
@@ -72,7 +72,7 @@ function CalendarFormateur({ modules, event, ...props }) {
     <>
       <FullCalendar
         data={calendarData}
-        event={{ tooltip: FormateurView.eventTooltip, ...event }}
+        event={{ EventTooltip: FormateurView.EventTooltip, ...event }}
         {...props}
       />
     </>
