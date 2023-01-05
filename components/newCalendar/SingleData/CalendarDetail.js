@@ -5,7 +5,7 @@ import { formatMonthYear, nbOfDaysBetween } from "../../../lib/date";
 import CalendarRow from "./CalendarRow";
 
 
-export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,additionalInfo,context }) {
+export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,AdditionalInfo,context }) {
   const dayNb = events.reduce(
     (acc, { start, end }) => acc + nbOfDaysBetween(start, end),
     0
@@ -48,7 +48,7 @@ export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,a
       }
 
       currDayCumul += nbOfDaysBetween(event.start, event.end);
-      eventsComp.push(<CalendarRow event={event} key={i} context={context} additionalInfo={additionalInfo} />);
+      eventsComp.push(<CalendarRow event={event} key={i} context={context} AdditionalInfo={AdditionalInfo} />);
     }
 
     let lastEvt = events[events.length - 1];
@@ -84,7 +84,7 @@ export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,a
         <Box sx={{ ...commonHeaderStyle, gridColumnStart: 3 }}>Évenement</Box>
         <Box sx={{ ...commonHeaderStyle }}>{additionalLabel}</Box>
         {eventsUI}
-      </Box>{" "}
+      </Box>
     </Box>
   );
 }

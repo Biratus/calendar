@@ -5,20 +5,19 @@ import Dropdown from "../../../components/Dropdown/Dropdown";
 import { changeURLParam } from "../../../lib/navigation";
 import { FiliereView, FormateurView } from "./CalendarViews";
 
-const views = {
-  filiere: FiliereView,
-  formateur: FormateurView,
-};
+const views = {};
+views[FiliereView.key] = FiliereView;
+views[FormateurView.key] = FormateurView;
 
-export default function ViewDropdown({ view: viewParam }) {
+export default function ViewDropdown({ view: viewParam = FiliereView.key  }) {
   const router = useRouter();
   const params = useSearchParams();
   const path = usePathname();
 
-  const view =
-    viewParam && views.hasOwnProperty(viewParam)
-      ? views[viewParam]
-      : views.filiere;
+  const view =views[viewParam]
+    // viewParam && views.hasOwnProperty(viewParam)
+    //   ? views[viewParam]
+    //   : views.filiere;
 
   const viewActions = Object.keys(views).map((k) => {
     return {

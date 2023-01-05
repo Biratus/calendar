@@ -14,11 +14,11 @@ export default function LegendProvider({ themes, children }) {
 
   const [legendList, setLegendList] = useState(fullLegend);
 
-  const showLegend = (themes, includeMissingFormateur) => {
+  const showLegend = (themes, includeMissingFormateur = false) => {
     setLegendList([
       ...fullLegend.filter(
         (l) =>
-          themes.include(l.label) ||
+          themes.includes(l.label) ||
           (includeMissingFormateur && l.label == missingFormateurLegend.label)
       ),
     ]);

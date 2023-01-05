@@ -4,10 +4,11 @@ import { eachDayOfInterval, isSameDay } from "date-fns";
 import { useContext } from "react";
 import { formatDayDate } from "../../../lib/date";
 
-export default function CalendarRow({ event,additionalInfo, context }) {
+export default function CalendarRow({ event,AdditionalInfo, context }) {
   const { start, end, name } = event;
 
   const { color, eventHighlighted, highlightedProp,onClick } = useContext(context);
+
   const highlighted = event && eventHighlighted(event);
 
   let dayNb = eachDayOfInterval({ start, end }).length;
@@ -44,7 +45,9 @@ export default function CalendarRow({ event,additionalInfo, context }) {
       >
         {name}
       </Box>
-      <Box sx={{ ...commonStyle }}>{additionalInfo(event)}</Box>
+      <Box sx={{ ...commonStyle }}>
+        <AdditionalInfo event={event}/>
+      </Box>
     </>
   );
 }
