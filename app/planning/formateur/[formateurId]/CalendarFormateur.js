@@ -1,6 +1,7 @@
 "use client";
 
 import { Stack, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { useCalendar } from "../../(components)/CalendarProvider";
 import { FormateurView } from "../../(components)/CalendarViews";
 import GlobalViewLink from "../../(components)/GlobalViewLink";
@@ -25,8 +26,14 @@ export default function CalendarFormateur({
   const formateurData = mapISO(data, ["start", "end"]);
   const { openMenu, joursFeries } = useCalendar();
   const [month] = useMonthNavigation();
-  const { colorOf } = useLegend();
+  const { colorOf,showLegend } = useLegend();
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, defaultCoef);
+
+  useEffect(
+    () =>
+      showLegend([...new Set(formateurData.map(({ theme }) => theme))]),
+    []
+  );
 
   return (
     <Stack justifyContent="center" alignItems="center" spacing={2}>
