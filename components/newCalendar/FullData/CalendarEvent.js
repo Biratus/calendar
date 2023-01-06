@@ -4,7 +4,7 @@ import { Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import { isWeekend } from "date-fns";
 import { forwardRef, useContext } from "react";
-import { day, weekend } from "../../calendar/styles/styles";
+import { day, weekend } from "../styles";
 
 const style = {
   display: "flex",

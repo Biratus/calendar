@@ -3,7 +3,7 @@
 import { Box } from "@mui/material";
 import React, { useMemo } from "react";
 import { formatMonthYear } from "../../../lib/date";
-import { monthLabel } from "../../calendar/styles/styles";
+import { monthLabel } from "../styles";
 import CalendarCell from "./CalendarCell";
 
 export default function CalendarMonth({ days }) {

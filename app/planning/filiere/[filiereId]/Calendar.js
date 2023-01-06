@@ -8,13 +8,13 @@ import { useCalendar } from "../../(components)/CalendarProvider";
 import { FiliereView } from "../../(components)/CalendarViews";
 import { useLegend } from "../../(components)/LegendProvider";
 import { missingFormateurStyle } from "../../../../components/calendar/styles/styles";
-import ZoomUI from "../../../../components/calendar/ZoomUI";
 import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarDetail from "../../../../components/newCalendar/SingleData/CalendarDetail";
 import { useLocalStorage } from "../../../../hooks/localStorageHook";
 import { mapISO } from "../../../../lib/calendar";
 import { isFormateurMissing } from "../../../../lib/realData";
 import GlobalViewLink from "../../(components)/GlobalViewLink";
+import ZoomUI from "../../../../components/ZoomUI";
 
 const viewWidth = 0.5;
 const zoomCoefKey = "zoom_calendar_filiere";

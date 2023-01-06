@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
-import { missingFormateurStyle } from "../../../components/calendar/styles/styles";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
+import { missingFormateurStyle } from "../../../components/newCalendar/styles";
 import { toCalendarData } from "../../../lib/calendar";
 import { getJourFeries, isJoursFeries } from "../../../lib/date";
 import { isFormateurMissing } from "../../../lib/realData";
@@ -55,7 +55,9 @@ function CalendarFiliere({ modules, event, ...props }) {
   return (
     <FullCalendar
       data={calendarData}
-      event={{ EventTooltip: FiliereView.EventTooltip, ...event }}
+      EventTooltip={FiliereView.EventTooltip}
+      LabelComponent={FiliereView.LabelComponent}
+      event={event}
       {...props}
     />
   );
@@ -72,7 +74,9 @@ function CalendarFormateur({ modules, event, ...props }) {
     <>
       <FullCalendar
         data={calendarData}
-        event={{ EventTooltip: FormateurView.EventTooltip, ...event }}
+        EventTooltip={FormateurView.EventTooltip}
+        LabelComponent={FormateurView.LabelComponent}
+        event={event}
         {...props}
       />
     </>

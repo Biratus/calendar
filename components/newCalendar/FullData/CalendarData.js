@@ -2,24 +2,21 @@
 
 import { Box, Skeleton, Tooltip, useTheme } from "@mui/material";
 import {
-  addMonths,
   areIntervalsOverlapping,
   eachDayOfInterval,
   endOfMonth,
-  isWeekend,
-  parseISO,
-  startOfMonth,
+  isWeekend, startOfMonth
 } from "date-fns";
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useMemo } from "react";
 import { useLocalStorage } from "../../../hooks/localStorageHook";
 import { makeMonths } from "../../../lib/calendar";
 import {
   formatDayDate,
   formatMonthYear,
-  formatSimpleDayLabel,
+  formatSimpleDayLabel
 } from "../../../lib/date";
-import { monthLabel, weekend } from "../../calendar/styles/styles";
-import ZoomUI from "../../calendar/ZoomUI";
+import ZoomUI from "../../ZoomUI";
+import { monthLabel, weekend } from "../styles";
 import CalendarRow from "./CalendarRow";
 
 const zoomCoefKey = "zoom_calendar_full";
@@ -27,6 +24,8 @@ const minCellSize = 20;
 
 export default function FullCalendar({
   data: originalData,
+  LabelComponent,
+  EventTooltip,
   time: { start, monthLength },
   event,
   day,
@@ -130,7 +129,8 @@ export default function FullCalendar({
               <CalendarRow
                 key={i}
                 events={d.events}
-                labelProps={{ title: d.labelTitle, comp: d.labelComponent }}
+                EventTooltip={EventTooltip}
+                labelProps={{ key:d.key,title: d.labelTitle, LabelComponent: LabelComponent }}
                 context={FullCalendarContext}
               />
             ))}

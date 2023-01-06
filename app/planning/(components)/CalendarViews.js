@@ -3,6 +3,30 @@ import Link from "next/link";
 import React from "react";
 import EventTooltip from "../../../components/newCalendar/EventTooltip";
 
+const FiliereLabel = React.forwardRef(
+  ({ labelKey: filiere, ...props }, ref) => {
+    return (
+      <RowLabel
+        label={filiere}
+        href={`filiere/${filiere}`}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+const FormateurLabel = React.forwardRef(
+  ({ labelKey: { nom, prenom, mail }, ...props }, ref) => {
+    return (
+      <RowLabel
+        label={formateurSimple({ nom, prenom, mail })}
+        href={`formateur/${mail}`}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
 const formateurSimple = ({ nom, prenom, mail }) => `${nom} ${prenom} - ${mail}`;
 
 const labelStyle = {
@@ -21,27 +45,20 @@ const labelStyle = {
   },
 };
 export const FiliereView = {
-  key:'filiere',
+  key: "filiere",
   label: "Filière",
   keyObject: ({ filiere }) => filiere,
   labelTitle: (f) => f,
-  labelComponent: (filiere) => (
-    <RowLabel label={filiere} href={`filiere/${filiere}`} />
-  ),
+  LabelComponent: FiliereLabel,
   EventTooltip: FormateurTooltip,
 };
 
 export const FormateurView = {
-  key:'formateur',
+  key: "formateur",
   label: "Formateur",
   keyObject: ({ formateur }) => formateur,
   labelTitle: ({ nom, prenom, mail }) => `${nom} ${prenom} [${mail}]`,
-  labelComponent: ({ nom, prenom, mail }) => (
-    <RowLabel
-      label={formateurSimple({ nom, prenom, mail })}
-      href={`formateur/${mail}`}
-    />
-  ),
+  LabelComponent: FormateurLabel,
   EventTooltip: FiliereTooltip,
 };
 
@@ -55,7 +72,7 @@ function FiliereTooltip({ event, children }) {
     </EventTooltip>
   );
 }
-export function FormateurTooltip({ event, children }) {
+function FormateurTooltip({ event, children }) {
   return (
     <EventTooltip
       event={event}

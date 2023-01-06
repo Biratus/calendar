@@ -4,7 +4,7 @@ import { Box, Stack, Tooltip, Typography, useTheme } from "@mui/material";
 import { isSameDay, isWeekend } from "date-fns";
 import { useContext } from "react";
 import { formatDayDate } from "../../../lib/date";
-import { backgroundFor, day, weekend } from "../../calendar/styles/styles";
+import { backgroundFor, day, weekend } from "../styles";
 import { SimpleCalendarContext } from "./CalendarSimple";
 import { useHover } from "./HoverProvider";
 

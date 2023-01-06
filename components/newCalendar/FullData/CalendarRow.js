@@ -3,27 +3,25 @@
 import { Box, Tooltip, useTheme } from "@mui/material";
 import { eachDayOfInterval, isWeekend, isWithinInterval } from "date-fns";
 import { useContext } from "react";
-import { FormateurTooltip } from "../../../app/planning/(components)/CalendarViews";
-import { day as dayStyle, weekend } from "../../calendar/styles/styles";
-import EventTooltip from "../EventTooltip";
+import { day as dayStyle, weekend } from "../styles";
 import CalendarEvent from "./CalendarEvent";
 
 export default function CalendarRow({
   events,
-  labelProps: { title: lableTitle, comp: labelComponent },
+  labelProps: { key: labelKey, title: labelTitle, LabelComponent },
+  EventTooltip,
   context,
 }) {
   const theme = useTheme();
   const {
-    event: { EventTooltip },
     days,
   } = useContext(context);
-  
+
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
-      <Tooltip title={lableTitle} arrow placement="right">
-        {labelComponent}
+      <Tooltip title={labelTitle} arrow placement="right">
+        <LabelComponent labelKey={labelKey} />
       </Tooltip>
       {daysAndEvents.map((day, id) => {
         return day.event ? (
