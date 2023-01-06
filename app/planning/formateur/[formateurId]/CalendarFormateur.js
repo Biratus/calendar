@@ -13,7 +13,6 @@ import CalendarSimple from "../../../../components/newCalendar/SimpleView/Calend
 import ZoomUI from "../../../../components/ZoomUI";
 import { useLocalStorage } from "../../../../hooks/localStorageHook";
 import { mapISO } from "../../../../lib/calendar";
-import { getJourFeries, isJoursFeries } from "../../../../lib/date";
 
 const viewWidth = 0.5;
 const zoomCoefKey = "zoom_calendar_small";
@@ -24,7 +23,7 @@ export default function CalendarFormateur({
   data,
 }) {
   const formateurData = mapISO(data, ["start", "end"]);
-  const { openMenu, joursFeries } = useCalendar();
+  const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf,showLegend } = useLegend();
   const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, defaultCoef);
@@ -58,9 +57,9 @@ export default function CalendarFormateur({
             onClick: openMenu,
           }}
           dayProps={{
-            highlighted: (day) => isJoursFeries(joursFeries, day),
+            highlighted: isJoursFeries,
             highlightedProp: { color: "red" },
-            highlightInfo: (day) => getJourFeries(joursFeries, day),
+            highlightInfo: getJourFeries,
           }}
           sx={{
             width: viewWidth + zoom * 0.1,

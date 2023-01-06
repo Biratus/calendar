@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import { missingFormateurStyle } from "../../../components/newCalendar/styles";
 import { toCalendarData } from "../../../lib/calendar";
-import { getJourFeries, isJoursFeries } from "../../../lib/date";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView, FormateurView } from "./CalendarViews";
@@ -11,7 +10,7 @@ import { useLegend } from "./LegendProvider";
 import { useMonthNavigation } from "./MonthNavigationProvider";
 
 export default function CommonCalendar({ modules, view, monthLength = 3 }) {
-  const { openMenu, joursFeries } = useCalendar();
+  const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf } = useLegend();
 
@@ -25,9 +24,9 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
       highlightedProp: missingFormateurStyle,
     },
     day: {
-      highlighted: (day) => isJoursFeries(joursFeries, day),
+      highlighted: isJoursFeries,
       highlightedProp: { color: "red" },
-      highlightInfo: (day) => getJourFeries(joursFeries, day),
+      highlightInfo: getJourFeries,
     },
   };
 

@@ -2,11 +2,12 @@
 
 import SafetyDividerIcon from "@mui/icons-material/SafetyDivider";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useCallback, useContext, useMemo, useReducer } from "react";
 import SplitModuleModal from "../../../components/modals/SplitModuleModal";
 import SwitchFormateurModal from "../../../components/modals/SwitchFormateurModal";
 import PopUpMenu from "../../../components/PopUpMenu/PopUpMenu";
 import { splitModule, switchFormateur } from "../../../lib/dataAccess";
+import { format } from "../../../lib/date";
 
 const CalendarContext = createContext();
 const hoverElementsInit = {
@@ -63,8 +64,20 @@ export default function CalendarProvider({ joursFeries, children }) {
     return true;
   };
 
+  const isJoursFeries = useCallback(
+    (day) => joursFeries.hasOwnProperty(format(day, "yyyy-MM-dd")),
+    [joursFeries]
+  );
+
+  const getJourFeries = useCallback(
+    (day) => joursFeries[format(day, "yyyy-MM-dd")],
+    [joursFeries]
+  );
+
   return (
-    <CalendarContext.Provider value={{ openMenu, joursFeries }}>
+    <CalendarContext.Provider
+      value={{ openMenu, isJoursFeries, getJourFeries }}
+    >
       {children}
       <PopUpMenu
         anchorEl={hoverProps.menuAnchor}
