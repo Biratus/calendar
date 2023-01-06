@@ -1,20 +1,21 @@
-"use client"
+"use client";
 import { Box } from "@mui/material";
 import {
   eachDayOfInterval,
   endOfMonth,
   isWithinInterval,
   parseISO,
-  startOfMonth
+  startOfMonth,
 } from "date-fns";
 import { createContext, useMemo, useState } from "react";
 import { makeMonths } from "../../../lib/calendar";
 import CalendarMonth from "./CalendarMonth";
+import HoverProvider from "./HoverProvider";
 
 const week = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 const minCellHeight = 5;
 
-const SimpleCalendarContext = createContext();
+export const SimpleCalendarContext = createContext();
 
 export default function CalendarSimple({
   time: { start, monthLength },
@@ -22,15 +23,15 @@ export default function CalendarSimple({
   zoom,
   eventProps,
   dayProps,
-  sx
+  sx,
 }) {
   const months = useMemo(
-    () => makeMonths(parseISO(start), monthLength),
+    () => makeMonths(start, monthLength),
     [start, monthLength]
   );
-  const [hover, setHover] = useState();
 
-  const daysAndEventsOf = ({ day }) => mergeDaysAndEvent(
+  const daysAndEventsOf = ({ day }) =>
+    mergeDaysAndEvent(
       eachDayOfInterval({
         start: startOfMonth(day),
         end: endOfMonth(day),
@@ -51,20 +52,20 @@ export default function CalendarSimple({
       ))}
       <SimpleCalendarContext.Provider
         value={{
-          hover,
-          setHover,
           cellHeight: `${minCellHeight + zoom * 0.5}em`,
           event: eventProps,
           day: dayProps,
         }}
       >
-        {months.map((m, id) => (
-          <CalendarMonth
-            key={id}
-            days={daysAndEventsOf(m)}
-            context={SimpleCalendarContext}
-          />
-        ))}
+        <HoverProvider>
+          {months.map((m, id) => (
+            <CalendarMonth
+              key={id}
+              days={daysAndEventsOf(m)}
+              context={SimpleCalendarContext}
+            />
+          ))}
+        </HoverProvider>
       </SimpleCalendarContext.Provider>
     </Box>
   );

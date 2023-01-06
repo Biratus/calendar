@@ -5,6 +5,8 @@ import { isSameDay, isWeekend } from "date-fns";
 import { useContext } from "react";
 import { formatDayDate } from "../../../lib/date";
 import { backgroundFor, day, weekend } from "../../calendar/styles/styles";
+import { SimpleCalendarContext } from "./CalendarSimple";
+import { useHover } from "./HoverProvider";
 
 const cellStyle = {
   pl: 2,
@@ -14,19 +16,17 @@ const cellStyle = {
   alignItems: "center",
 };
 
-export default function CalendarCell({
-  day: { date, event },
-  Tooltip: EventTooltip = <></>,
-  context,
-}) {
+export default function CalendarCell({ day: { date, event } }) {
   const theme = useTheme();
   const {
-    hover,
-    setHover,
     cellHeight: height,
     event: eventProps,
     day: dayProps,
-  } = useContext(context);
+  } = useContext(SimpleCalendarContext);
+
+  const EventTooltip = eventProps.EventTooltip;
+
+  const [hover, setHover] = useHover();
 
   const gridColumnStart = () => {
     if (date.getDate() != 1) return "auto";

@@ -16,9 +16,8 @@ const hoverElementsInit = {
   module: null,
 };
 
-
 // Stuff to handle pop over components (menu, modals)
-export default function CalendarProvider({ joursFeries, themes, children }) {
+export default function CalendarProvider({ joursFeries, children }) {
   // Menu State
   const [hoverProps, hoverDispatch] = useReducer(
     hoverReducer,
