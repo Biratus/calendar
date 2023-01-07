@@ -10,13 +10,13 @@ import MonthNavigation from "../../(components)/MonthNavigation";
 import { useMonthNavigation } from "../../(components)/MonthNavigationProvider";
 import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarSimple from "../../../../components/newCalendar/SimpleView/CalendarSimple";
-import ZoomUI from "../../../../components/ZoomUI";
-import { useLocalStorage } from "../../../../hooks/localStorageHook";
+import {
+  useZoom
+} from "../../../../components/zoom/ZoomProvider";
+import ZoomUI from "../../../../components/zoom/ZoomUI";
 import { mapISO } from "../../../../lib/calendar";
 
 const viewWidth = 0.5;
-const zoomCoefKey = "zoom_calendar_small";
-const defaultCoef = 5;
 
 export default function CalendarFormateur({
   formateur: { nom, prenom, mail },
@@ -25,14 +25,15 @@ export default function CalendarFormateur({
   const formateurData = mapISO(data, ["start", "end"]);
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
-  const { colorOf,showLegend } = useLegend();
-  const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, defaultCoef);
+  const { colorOf, showLegend } = useLegend();
+  const { zoom, loaded } = useZoom();
 
   useEffect(
-    () =>
-      showLegend([...new Set(formateurData.map(({ theme }) => theme))]),
+    () => showLegend([...new Set(formateurData.map(({ theme }) => theme))]),
     []
   );
+
+  // const calendarWidth = useMemo(() => viewWidth + zoom * 0.1,[zoom,loaded]);
 
   return (
     <Stack justifyContent="center" alignItems="center" spacing={2}>
@@ -41,7 +42,7 @@ export default function CalendarFormateur({
       </Typography>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 0.5 }}>
         <GlobalViewLink view={FormateurView.key} />
-        <ZoomUI range={5} onChange={setZoom} value={zoom} />
+        <ZoomUI range={5} />
       </Stack>
       <MonthNavigation />
       {!loaded ? (

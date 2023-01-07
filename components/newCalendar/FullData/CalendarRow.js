@@ -4,18 +4,16 @@ import { Box, Tooltip, useTheme } from "@mui/material";
 import { eachDayOfInterval, isWeekend, isWithinInterval } from "date-fns";
 import { useContext } from "react";
 import { day as dayStyle, weekend } from "../styles";
+import { FullCalendarContext } from "./CalendarData";
 import CalendarEvent from "./CalendarEvent";
 
 export default function CalendarRow({
   events,
   labelProps: { key: labelKey, title: labelTitle, LabelComponent },
   EventTooltip,
-  context,
 }) {
   const theme = useTheme();
-  const {
-    days,
-  } = useContext(context);
+  const { days } = useContext(FullCalendarContext);
 
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
@@ -27,10 +25,10 @@ export default function CalendarRow({
         return day.event ? (
           EventTooltip ? (
             <EventTooltip key={id} event={day.event}>
-              <CalendarEvent key={id} day={day} context={context} />
+              <CalendarEvent key={id} day={day} />
             </EventTooltip>
           ) : (
-            <CalendarEvent key={id} day={day} context={context} />
+            <CalendarEvent key={id} day={day} />
           )
         ) : (
           <Cell

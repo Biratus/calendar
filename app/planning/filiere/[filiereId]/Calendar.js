@@ -1,24 +1,21 @@
 "use client";
-import ArrowCircleLeftOutlinedIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { createContext, useEffect } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { createContext, useEffect, useMemo } from "react";
 import { useCalendar } from "../../(components)/CalendarProvider";
 import { FiliereView } from "../../(components)/CalendarViews";
+import GlobalViewLink from "../../(components)/GlobalViewLink";
 import { useLegend } from "../../(components)/LegendProvider";
-import { missingFormateurStyle } from "../../../../components/calendar/styles/styles";
 import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarDetail from "../../../../components/newCalendar/SingleData/CalendarDetail";
-import { useLocalStorage } from "../../../../hooks/localStorageHook";
+import { missingFormateurStyle } from "../../../../components/newCalendar/styles";
+import { useZoom } from "../../../../components/zoom/ZoomProvider";
+import ZoomUI from "../../../../components/zoom/ZoomUI";
 import { mapISO } from "../../../../lib/calendar";
 import { isFormateurMissing } from "../../../../lib/realData";
-import GlobalViewLink from "../../(components)/GlobalViewLink";
-import ZoomUI from "../../../../components/ZoomUI";
 
 const viewWidth = 0.5;
-const zoomCoefKey = "zoom_calendar_filiere";
-const defaultCoef = 5;
 const minCellHeight = 1.3;
 const zoomCoef = 0.4;
 
@@ -27,14 +24,18 @@ const FiliereContext = createContext();
 export default function CalendarFiliere({ name, data }) {
   const filiereData = mapISO(data, ["start", "end"]);
   const { showLegend, colorOf } = useLegend();
-  const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, defaultCoef);
+  const { zoom, loaded } = useZoom();
   const { openMenu } = useCalendar();
 
   useEffect(
-    () =>
-      showLegend([...new Set(filiereData.map(({ theme }) => theme))], true),
+    () => showLegend([...new Set(filiereData.map(({ theme }) => theme))], true),
     []
   );
+
+  // const cellHeight = useMemo(() => {
+  //   return `${minCellHeight + zoom * zoomCoef}em`;
+  // },[zoom]);
+
   return (
     <Stack justifyContent="center" alignItems="center" spacing={2}>
       <Typography variant="h2" align="center">
@@ -42,7 +43,7 @@ export default function CalendarFiliere({ name, data }) {
       </Typography>
       <Stack direction="row" justifyContent="space-between" sx={{ width: 0.5 }}>
         <GlobalViewLink view={FiliereView.key} />
-        <ZoomUI range={5} onChange={setZoom} value={zoom} />
+        <ZoomUI range={5} />
       </Stack>
       <Box sx={{ width: viewWidth + zoom * 0.1 }}>
         {!loaded ? (

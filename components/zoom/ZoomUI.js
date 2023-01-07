@@ -1,19 +1,22 @@
+"use client";
 import { Button, ButtonGroup } from "@mui/material";
 import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
 import ZoomOutOutlinedIcon from "@mui/icons-material/ZoomOutOutlined";
+import { useZoom } from "./ZoomProvider";
 
-export default function ZoomUI({ value,range,onChange }) {
+export default function ZoomUI({ range }) {
+  const { zoom, setZoom } = useZoom();
 
-    const zoom = (coef) => {
-        onChange(value+coef);
-    }
+  const onZoomChange = (coef) => {
+    setZoom(zoom + coef);
+  };
 
   return (
     <ButtonGroup variant="outlined" color="ajcBlue">
-      <Button onClick={() => zoom(1)} disabled={value >= range}>
+      <Button onClick={() => onZoomChange(1)} disabled={zoom >= range}>
         <ZoomInOutlinedIcon fontSize="large" />
       </Button>
-      <Button onClick={() => zoom(-1)} disabled={value <= 0}>
+      <Button onClick={() => onZoomChange(-1)} disabled={zoom <= 0}>
         <ZoomOutOutlinedIcon fontSize="large" />
       </Button>
     </ButtonGroup>

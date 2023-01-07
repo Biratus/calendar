@@ -5,6 +5,7 @@ import { Box } from "@mui/system";
 import { isWeekend } from "date-fns";
 import { forwardRef, useContext } from "react";
 import { day, weekend } from "../styles";
+import { FullCalendarContext } from "./CalendarData";
 
 const style = {
   display: "flex",
@@ -19,11 +20,11 @@ const style = {
   },
 };
 
-const CalendarEvent = forwardRef(({ day: { date, event }, context,...props },ref) => {
+const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
   const theme = useTheme();
   const {
     event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
-  } = useContext(context);
+  } = useContext(FullCalendarContext);
 
   const commonClasses = {
     ...day,

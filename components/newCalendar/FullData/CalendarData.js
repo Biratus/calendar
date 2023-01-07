@@ -8,19 +8,20 @@ import {
   isWeekend, startOfMonth
 } from "date-fns";
 import React, { createContext, useMemo } from "react";
-import { useLocalStorage } from "../../../hooks/localStorageHook";
 import { makeMonths } from "../../../lib/calendar";
 import {
   formatDayDate,
   formatMonthYear,
   formatSimpleDayLabel
 } from "../../../lib/date";
-import ZoomUI from "../../ZoomUI";
+import { useZoom } from "../../zoom/ZoomProvider";
+import ZoomUI from "../../zoom/ZoomUI";
 import { monthLabel, weekend } from "../styles";
 import CalendarRow from "./CalendarRow";
 
-const zoomCoefKey = "zoom_calendar_full";
 const minCellSize = 20;
+
+export const FullCalendarContext = createContext();
 
 export default function FullCalendar({
   data: originalData,
@@ -31,7 +32,7 @@ export default function FullCalendar({
   day,
 }) {
   const theme = useTheme();
-  const [zoom, setZoom, loaded] = useLocalStorage(zoomCoefKey, 2);
+  const { zoom, loaded } = useZoom();
   const { highlighted, highlightedProp, highlightInfo } = day;
 
   const month = start;
@@ -93,7 +94,6 @@ export default function FullCalendar({
     ];
   }, [days, zoom]);
 
-  const FullCalendarContext = createContext();
   return (
     <FullCalendarContext.Provider
       value={{
@@ -103,7 +103,7 @@ export default function FullCalendar({
         days,
       }}
     >
-      <ZoomUI range={5} onChange={setZoom} value={zoom} />
+      <ZoomUI range={5}/>
       <Box
         sx={{
           gridTemplateColumns: `${10 + zoom}% repeat(${days.length},${
@@ -131,7 +131,6 @@ export default function FullCalendar({
                 events={d.events}
                 EventTooltip={EventTooltip}
                 labelProps={{ key:d.key,title: d.labelTitle, LabelComponent: LabelComponent }}
-                context={FullCalendarContext}
               />
             ))}
       </Box>

@@ -1,15 +1,19 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 
 export function useLocalStorage(key, defaultValue) {
   const [value, setValue] = useState(defaultValue);
-  const loaded = useRef(false);
+  const [loaded, setLoaded] = useState(false);
 
   // Load when localStorage is available
   useEffect(() => {
     const jsonValue = localStorage.getItem(key);
+    console.log("Get from LS", jsonValue);
     if (jsonValue == null) localStorage.setItem(key, JSON.stringify(value));
-    else setValue(JSON.parse(jsonValue));
-    loaded.current=true;
+    else {
+      setValue(() => JSON.parse(jsonValue));
+      setLoaded(true);
+    }
   }, []);
 
   // setValue & persist in localStorage
@@ -20,5 +24,5 @@ export function useLocalStorage(key, defaultValue) {
     });
   };
 
-  return [value, changeValue,loaded.current];
+  return [value, changeValue, loaded];
 }
