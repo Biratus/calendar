@@ -31,11 +31,7 @@ export default function CalendarFiliere({ name, data }) {
     () => showLegend([...new Set(filiereData.map(({ theme }) => theme))], true),
     []
   );
-
-  // const cellHeight = useMemo(() => {
-  //   return `${minCellHeight + zoom * zoomCoef}em`;
-  // },[zoom]);
-
+  
   return (
     <Stack justifyContent="center" alignItems="center" spacing={2}>
       <Typography variant="h2" align="center">

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 export function useLocalStorage(key, defaultValue) {
   const [value, setValue] = useState(defaultValue);
-  const [loaded, setLoaded] = useState(false);
+  const loaded = useRef(false);
 
   // Load when localStorage is available
   useEffect(() => {
@@ -11,8 +11,9 @@ export function useLocalStorage(key, defaultValue) {
     console.log("Get from LS", jsonValue);
     if (jsonValue == null) localStorage.setItem(key, JSON.stringify(value));
     else {
-      setValue(() => JSON.parse(jsonValue));
-      setLoaded(true);
+      setValue(() => {
+        loaded.current = true;
+        return JSON.parse(jsonValue)});
     }
   }, []);
 
@@ -24,5 +25,5 @@ export function useLocalStorage(key, defaultValue) {
     });
   };
 
-  return [value, changeValue, loaded];
+  return [value, changeValue, loaded.current];
 }
