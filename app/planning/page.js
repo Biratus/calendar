@@ -11,7 +11,6 @@ const monthStart = startOfMonth(startOfToday());
 
 export default function PlanningPage({ searchParams: { date, view } }) {
   if (date) date = parseMonthAndYear(date);
-console.log("Planning page",{date,view});
   return (
     <MonthNavigationProvider focus={formatISO(date || monthStart)}>
       <ViewDropdown view={view} />

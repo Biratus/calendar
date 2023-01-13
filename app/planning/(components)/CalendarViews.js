@@ -44,6 +44,7 @@ const labelStyle = {
     backgroundColor: "ajcBlue.dark",
   },
 };
+
 export const FiliereView = {
   key: "filiere",
   label: "Filière",
