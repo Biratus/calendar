@@ -5,6 +5,7 @@ export default function Page() {
     <>
       <Link href="/planning">Planning</Link>
       <Link href="/ui-tests">UI Tests</Link>
+      <Link href="/test" prefetch={false}>Tests</Link>
     </>
   );
 }

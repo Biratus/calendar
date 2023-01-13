@@ -33,6 +33,7 @@ export default function FullCalendar({
 }) {
   const theme = useTheme();
   const { zoom, loaded } = useZoom();
+  console.log("FullCalendar",loaded);
   const { highlighted, highlightedProp, highlightInfo } = day;
 
   const month = start;

@@ -4,9 +4,12 @@ import { useLocalStorage } from "../../hooks/localStorageHook";
 
 const ZoomContext = createContext();
 
-export default function ZoomProvider({ storageKey, defaultCoef = 1, children }) {
+export default function ZoomProvider({
+  storageKey,
+  defaultCoef = 1,
+  children,
+}) {
   const [zoom, setZoom, loaded] = useLocalStorage(storageKey, defaultCoef);
-
   return (
     <ZoomContext.Provider value={{ zoom, setZoom, loaded }}>
       {children}

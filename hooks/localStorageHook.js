@@ -8,7 +8,6 @@ export function useLocalStorage(key, defaultValue) {
   // Load when localStorage is available
   useEffect(() => {
     const jsonValue = localStorage.getItem(key);
-    console.log("Get from LS", jsonValue);
     if (jsonValue == null) localStorage.setItem(key, JSON.stringify(value));
     else {
       setValue(() => {
