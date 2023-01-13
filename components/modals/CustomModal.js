@@ -13,7 +13,7 @@ const style = {
     boxShadow: 24,
     p: 4,
     borderRadius: "1em",
-    color: "black",
+    color: "text.primary",
   };
 
 export default function Modal({ open, close, children,...props }) {
