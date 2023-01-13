@@ -53,5 +53,5 @@ const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
   );
 }
 );
-
+CalendarEvent.displayName="CalendarEvent";
 export default CalendarEvent;

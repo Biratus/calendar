@@ -15,9 +15,6 @@ export default function ViewDropdown({ view: viewParam = FiliereView.key  }) {
   const path = usePathname();
 
   const view =views[viewParam]
-    // viewParam && views.hasOwnProperty(viewParam)
-    //   ? views[viewParam]
-    //   : views.filiere;
 
   const viewActions = Object.keys(views).map((k) => {
     return {

@@ -66,7 +66,7 @@ export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,A
     }
 
     return eventsComp;
-  }, [events]);
+  }, [events,AdditionalInfo,context]);
 
   return (
     <Box sx={{ ...sx }}>

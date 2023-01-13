@@ -33,11 +33,10 @@ export default function FullCalendar({
 }) {
   const theme = useTheme();
   const { zoom, loaded } = useZoom();
-  console.log("FullCalendar",loaded);
   const { highlighted, highlightedProp, highlightInfo } = day;
 
   const month = start;
-  const months = useMemo(() => makeMonths(month, monthLength), [month]);
+  const months = useMemo(() => makeMonths(month, monthLength), [month,monthLength]);
 
   const data = originalData.filter((d) =>
     dataOverlapInterval(d.events, {
@@ -67,7 +66,7 @@ export default function FullCalendar({
         />
       )
     );
-  }, [days, highlighted, highlightedProp, theme.palette.mode]);
+  }, [days, highlighted, highlightedProp,highlightInfo, theme.palette.mode]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);
@@ -98,10 +97,8 @@ export default function FullCalendar({
   return (
     <FullCalendarContext.Provider
       value={{
-        zoom,
-        event,
-        day,
         days,
+        event
       }}
     >
       <ZoomUI range={5}/>
@@ -171,6 +168,7 @@ const Day = React.forwardRef(({ day, first, sx = {}, ...props }, ref) => (
     <Box>{formatDayDate(day)}</Box>
   </Box>
 ));
+Day.displayName = "Day";
 
 function SpecialDay({day,specialLabel,specialStyle,first}) {
   return (

@@ -3,13 +3,14 @@ import { Button, ButtonGroup } from "@mui/material";
 import ZoomInOutlinedIcon from "@mui/icons-material/ZoomInOutlined";
 import ZoomOutOutlinedIcon from "@mui/icons-material/ZoomOutOutlined";
 import { useZoom } from "./ZoomProvider";
+import { useCallback } from "react";
 
 export default function ZoomUI({ range }) {
   const { zoom, setZoom } = useZoom();
 
-  const onZoomChange = (coef) => {
-    setZoom(zoom + coef);
-  };
+  const onZoomChange = useCallback((coef) => {
+    setZoom((z) => z + coef);
+  },[]);
 
   return (
     <ButtonGroup variant="outlined" color="ajcBlue">

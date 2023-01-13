@@ -42,8 +42,8 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
 
   return (
     <>
-      {(!view || view === "filiere") && calendarFiliere}
-      {view && view === "formateur" && calendarFormateur}
+      {(!view || view === FiliereView.key) && calendarFiliere}
+      {view && view === FormateurView.key && calendarFormateur}
     </>
   );
 }
