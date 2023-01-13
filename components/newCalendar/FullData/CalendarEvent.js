@@ -2,9 +2,7 @@
 
 import { Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
-import { isWeekend } from "date-fns";
 import { forwardRef, useContext } from "react";
-import { day, weekend } from "../styles";
 import { FullCalendarContext } from "./CalendarData";
 
 const style = {
@@ -22,23 +20,17 @@ const style = {
 
 const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
   const theme = useTheme();
-  const {
+  const {commonDayStyle,
     event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
   } = useContext(FullCalendarContext);
 
-  const commonClasses = {
-    ...day,
-    ...(isWeekend(date) && weekend[theme.palette.mode]),
-  };
-
   const highlighted = event && eventHighlighted(event);
-
   return (
     <Box
     ref={ref}
       sx={{
         ...style,
-        ...commonClasses,
+        ...commonDayStyle(date,false,theme),
         background: `radial-gradient(circle, ${color(
           event
         )} 30%, rgba(148,187,233,0) 100%)`,

@@ -1,10 +1,10 @@
 "use client";
 
 import { Box, Stack, Tooltip, Typography, useTheme } from "@mui/material";
-import { isSameDay, isWeekend } from "date-fns";
+import { isSameDay } from "date-fns";
 import { useContext } from "react";
 import { formatDayDate } from "../../../lib/date";
-import { backgroundFor, day, weekend } from "../styles";
+import { backgroundFor } from "../styles";
 import { SimpleCalendarContext } from "./CalendarSimple";
 import { useHover } from "./HoverProvider";
 
@@ -22,6 +22,7 @@ export default function CalendarCell({ day: { date, event } }) {
     cellHeight: height,
     event: eventProps,
     day: dayProps,
+    commonDayStyle
   } = useContext(SimpleCalendarContext);
 
   const EventTooltip = eventProps.EventTooltip;
@@ -44,9 +45,7 @@ export default function CalendarCell({ day: { date, event } }) {
       sx={{
         gridColumnStart: gridColumnStart(),
         height,
-        ...day,
-        ...(isWeekend(date) && weekend[theme.palette.mode]),
-        ...(dayProps.highlighted(date) && dayProps.highlightedProp),
+        ...commonDayStyle(date,dayProps.highlighted(date),theme)
       }}
     >
       {dayProps.highlighted(date) ? (

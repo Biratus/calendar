@@ -1,9 +1,8 @@
 "use client";
 
 import { Box, Tooltip, useTheme } from "@mui/material";
-import { eachDayOfInterval, isWeekend, isWithinInterval } from "date-fns";
+import { eachDayOfInterval, isWithinInterval } from "date-fns";
 import { useContext } from "react";
-import { day as dayStyle, weekend } from "../styles";
 import { FullCalendarContext } from "./CalendarData";
 import CalendarEvent from "./CalendarEvent";
 
@@ -13,8 +12,7 @@ export default function CalendarRow({
   EventTooltip,
 }) {
   const theme = useTheme();
-  const { days } = useContext(FullCalendarContext);
-
+  const { days,commonDayStyle } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
@@ -31,28 +29,17 @@ export default function CalendarRow({
             <CalendarEvent key={id} day={day} />
           )
         ) : (
-          <Cell
+          <Box
             key={id}
             sx={{
-              ...(isWeekend(day.date) && weekend[theme.palette.mode]),
+              textAlign: "center",
+              borderLeft: "1px solid gray",
+              ...commonDayStyle(day.date,false,theme)
             }}
-          />
+          ></Box>
         );
       })}
     </>
-  );
-}
-
-function Cell({ sx }) {
-  return (
-    <Box
-      sx={{
-        ...dayStyle,
-        textAlign: "center",
-        borderLeft: "1px solid gray",
-        ...sx,
-      }}
-    ></Box>
   );
 }
 

@@ -10,6 +10,7 @@ import MonthNavigation from "../../(components)/MonthNavigation";
 import { useMonthNavigation } from "../../(components)/MonthNavigationProvider";
 import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarSimple from "../../../../components/newCalendar/SimpleView/CalendarSimple";
+import { calendarDayStyle } from "../../../../components/newCalendar/styles";
 import {
   useZoom
 } from "../../../../components/zoom/ZoomProvider";
@@ -57,9 +58,9 @@ export default function CalendarFormateur({
           }}
           dayProps={{
             highlighted: isJoursFeries,
-            highlightedProp: { color: "red" },
             highlightInfo: getJourFeries,
           }}
+          commonDayStyle={calendarDayStyle}
           sx={{
             width: viewWidth + zoom * 0.1,
           }}

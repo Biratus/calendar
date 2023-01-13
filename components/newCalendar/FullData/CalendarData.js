@@ -4,8 +4,7 @@ import { Box, Skeleton, Tooltip, useTheme } from "@mui/material";
 import {
   areIntervalsOverlapping,
   eachDayOfInterval,
-  endOfMonth,
-  isWeekend, startOfMonth
+  endOfMonth, startOfMonth
 } from "date-fns";
 import React, { createContext, useMemo } from "react";
 import { makeMonths } from "../../../lib/calendar";
@@ -16,7 +15,7 @@ import {
 } from "../../../lib/date";
 import { useZoom } from "../../zoom/ZoomProvider";
 import ZoomUI from "../../zoom/ZoomUI";
-import { monthLabel, weekend } from "../styles";
+import { monthLabel } from "../styles";
 import CalendarRow from "./CalendarRow";
 
 const minCellSize = 20;
@@ -30,6 +29,7 @@ export default function FullCalendar({
   time: { start, monthLength },
   event,
   day,
+  commonDayStyle
 }) {
   const theme = useTheme();
   const { zoom, loaded } = useZoom();
@@ -54,15 +54,14 @@ export default function FullCalendar({
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
       highlighted(day) ? (
-        <SpecialDay key={i} day={day} specialLabel={highlightInfo(day)} specialStyle={{
-          ...(isWeekend(day) && weekend[theme.palette.mode]),
-          ...highlightedProp,}} first={i == 0}/>
+        <SpecialDay key={i} day={day} specialLabel={highlightInfo(day)} 
+        specialStyle={{...commonDayStyle(day,true,theme)}} first={i == 0}/>
       ) : (
         <Day
           key={i}
           first={i == 0}
           day={day}
-          sx={{ ...(isWeekend(day) && weekend[theme.palette.mode]) }}
+          sx={{...commonDayStyle(day,false,theme)}}
         />
       )
     );
@@ -98,7 +97,8 @@ export default function FullCalendar({
     <FullCalendarContext.Provider
       value={{
         days,
-        event
+        event,
+        commonDayStyle
       }}
     >
       <ZoomUI range={5}/>

@@ -1,4 +1,4 @@
-import { isSameDay } from "date-fns";
+import { isSameDay, isWeekend } from "date-fns";
 
 export const monthLabel = {
     color: 'ajcBlue.dark',
@@ -45,3 +45,14 @@ export const missingFormateurStyle = (eventColor) => ({
     ${eventColor} 20%,
     transparent 40%)`,
 });
+
+
+export const calendarDayStyle = (day,highlighted,theme) => {
+  let style = {...day};
+
+  if(isWeekend(day)) style = {...style,...weekend[theme.palette.mode]};
+
+  if(highlighted) style = {...style,color:'red'};
+
+  return style
+}

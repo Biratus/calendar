@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
-import { missingFormateurStyle } from "../../../components/newCalendar/styles";
+import { calendarDayStyle, missingFormateurStyle } from "../../../components/newCalendar/styles";
 import { toCalendarData } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
@@ -25,9 +25,9 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
     },
     day: {
       highlighted: isJoursFeries,
-      highlightedProp: { color: "red" },
       highlightInfo: getJourFeries,
     },
+    commonDayStyle:calendarDayStyle
   };
 
   const calendarFiliere = useMemo(
@@ -48,7 +48,7 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
   );
 }
 
-function CalendarFiliere({ modules, event, ...props }) {
+function CalendarFiliere({ modules, ...props }) {
   const calendarData = toCalendarData(modules, "filiere", FiliereView, true);
 
   return (
@@ -56,13 +56,12 @@ function CalendarFiliere({ modules, event, ...props }) {
       data={calendarData}
       EventTooltip={FiliereView.EventTooltip}
       LabelComponent={FiliereView.LabelComponent}
-      event={event}
       {...props}
     />
   );
 }
 
-function CalendarFormateur({ modules, event, ...props }) {
+function CalendarFormateur({ modules, ...props }) {
   const calendarData = toCalendarData(
     modules.filter((m) => !isFormateurMissing(m)),
     "formateur.mail",
@@ -75,7 +74,6 @@ function CalendarFormateur({ modules, event, ...props }) {
         data={calendarData}
         EventTooltip={FormateurView.EventTooltip}
         LabelComponent={FormateurView.LabelComponent}
-        event={event}
         {...props}
       />
     </>

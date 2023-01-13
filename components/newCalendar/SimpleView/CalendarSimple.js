@@ -3,11 +3,9 @@ import { Box } from "@mui/material";
 import {
   eachDayOfInterval,
   endOfMonth,
-  isWithinInterval,
-  parseISO,
-  startOfMonth,
+  isWithinInterval, startOfMonth
 } from "date-fns";
-import { createContext, useMemo, useState } from "react";
+import { createContext, useMemo } from "react";
 import { makeMonths } from "../../../lib/calendar";
 import CalendarMonth from "./CalendarMonth";
 import HoverProvider from "./HoverProvider";
@@ -24,6 +22,7 @@ export default function CalendarSimple({
   eventProps,
   dayProps,
   sx,
+  commonDayStyle
 }) {
   const months = useMemo(
     () => makeMonths(start, monthLength),
@@ -55,6 +54,7 @@ export default function CalendarSimple({
           cellHeight: `${minCellHeight + zoom * 0.5}em`,
           event: eventProps,
           day: dayProps,
+          commonDayStyle
         }}
       >
         <HoverProvider>
