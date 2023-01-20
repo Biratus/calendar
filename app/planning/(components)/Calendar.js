@@ -1,7 +1,10 @@
 "use client";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
-import { calendarDayStyle, missingFormateurStyle } from "../../../components/newCalendar/styles";
+import {
+  calendarDayStyle,
+  missingFormateurStyle,
+} from "../../../components/newCalendar/styles";
 import { toCalendarData } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
@@ -12,8 +15,8 @@ import { useMonthNavigation } from "./MonthNavigationProvider";
 export default function CommonCalendar({ modules, view, monthLength = 3 }) {
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
-  const { colorOf } = useLegend();
-
+  const { colorOf, showLegend } = useLegend();
+  useEffect(() => showLegend(), []);
   const commonProps = {
     modules,
     time: { start: month, monthLength },
@@ -27,7 +30,7 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
       highlighted: isJoursFeries,
       highlightInfo: getJourFeries,
     },
-    commonDayStyle:calendarDayStyle
+    commonDayStyle: calendarDayStyle,
   };
 
   const calendarFiliere = useMemo(
