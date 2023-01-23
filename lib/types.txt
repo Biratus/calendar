@@ -1,0 +1,5 @@
+type View: {
+    keyObject: object to pass as props if label has event,
+    labelTitle: tooltipTitle: function with key as param
+    labelComp: component to display for label: idem labelTitle
+}
