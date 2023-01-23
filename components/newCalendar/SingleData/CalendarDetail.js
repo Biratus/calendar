@@ -1,11 +1,10 @@
 import { Box, Paper } from "@mui/material";
 import { isSameMonth } from "date-fns";
-import { useContext, useMemo } from "react";
+import { forwardRef, useContext, useMemo } from "react";
 import { formatMonthYear, nbOfDaysBetween } from "../../../lib/date";
 import CalendarRow from "./CalendarRow";
 
-
-export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,AdditionalInfo,context }) {
+const CalendarDetail = forwardRef(({ sx, events,cellHeight,additionalLabel,AdditionalInfo,context },ref) => {
   const dayNb = events.reduce(
     (acc, { start, end }) => acc + nbOfDaysBetween(start, end),
     0
@@ -69,7 +68,7 @@ export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,A
   }, [events,AdditionalInfo,context]);
 
   return (
-    <Box sx={{ ...sx }}>
+    <Box sx={{ ...sx }} ref={ref}>
       <Box
         sx={{
           display: "grid",
@@ -87,7 +86,9 @@ export default function CalendarDetail({ sx, events,cellHeight,additionalLabel,A
       </Box>
     </Box>
   );
-}
+})
+
+export default CalendarDetail;
 
 function Month({ name, span }) {
   return (

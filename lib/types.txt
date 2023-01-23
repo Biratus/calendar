@@ -1,3 +1,22 @@
+type ModuleRaw: {
+    "id": "519e9410-094f-428f-ad3d-38f7bb5791be",
+    "name": "PROJET FINAL",
+    "start": "4/3/2023",
+    "end": "4/7/2023",
+    "theme": "PROJET",
+    "filiere": "I-230119-DIS-399-SOPRA-JAVA",
+    "formateur": {
+      "prenom": "Jaden",
+      "nom": "Lockman",
+      "mail": "Lockman_Jaden94@yahoo.com"
+    }
+}
+
+type ModuleData: {
+    idem ModuleRaw,
+    label: ModuleRaw.name
+}
+
 type View: {
     keyObject: object to pass as props if label has event,
     labelTitle: tooltipTitle: function with key as param
