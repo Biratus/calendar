@@ -24,8 +24,8 @@ const zoomCoef = 0.4;
 
 const FiliereContext = createContext();
 
-export default function CalendarFiliere({ name, data }) {
-  const filiereData = mapISO(data, ["start", "end"]);
+export default function CalendarFiliere({ name, modules }) {
+  const filiereData = mapISO(modules, ["start", "end"]);
   const { showLegend, colorOf} = useLegend();
   const { zoom, loaded } = useZoom();
   const { openMenu } = useCalendar();

@@ -15,7 +15,7 @@ export default function FilierePage({ params: { filiereId } }) {
 
   return (
     <ZoomProvider storageKey="zoom_calendar_filiere" defaultCoef={5}>
-      <CalendarFiliere name={filiereId} data={filiereData} />
+      <CalendarFiliere name={filiereId} modules={filiereData} />
     </ZoomProvider>
   );
 }
