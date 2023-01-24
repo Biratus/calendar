@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useMemo } from "react";
+import { LoadingBar } from "../../../components/LoadingBar";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   calendarDayStyle,
   missingFormateurStyle,
 } from "../../../components/newCalendar/styles";
+import { useZoom } from "../../../components/zoom/ZoomProvider";
+import ZoomUI from "../../../components/zoom/ZoomUI";
 import { toCalendarData } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
@@ -16,9 +19,13 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
+  const { zoom, loaded } = useZoom();
   useEffect(() => showLegend(), []);
+
+  // Props passed to Calendar
   const commonProps = {
     modules,
+    zoom,
     time: { start: month, monthLength },
     event: {
       color: (evt) => colorOf(evt.theme),
@@ -35,16 +42,18 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
 
   const calendarFiliere = useMemo(
     () => <CalendarFiliere {...commonProps} />,
-    [modules, month]
+    [modules, month, zoom]
   );
 
   const calendarFormateur = useMemo(
     () => <CalendarFormateur {...commonProps} />,
-    [modules, month]
+    [modules, month, zoom]
   );
+  if (!loaded) return <LoadingBar />;
 
   return (
     <>
+      <ZoomUI range={5} />
       {(!view || view === FiliereView.key) && calendarFiliere}
       {view && view === FormateurView.key && calendarFormateur}
     </>

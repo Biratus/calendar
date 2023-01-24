@@ -1,20 +1,19 @@
 "use client";
 
-import { Box, Skeleton, Tooltip, useTheme } from "@mui/material";
+import { Box, Tooltip, useTheme } from "@mui/material";
 import {
   areIntervalsOverlapping,
   eachDayOfInterval,
-  endOfMonth, startOfMonth
+  endOfMonth,
+  startOfMonth,
 } from "date-fns";
 import React, { createContext, useMemo } from "react";
 import { makeMonths } from "../../../lib/calendar";
 import {
   formatDayDate,
   formatMonthYear,
-  formatSimpleDayLabel
+  formatSimpleDayLabel,
 } from "../../../lib/date";
-import { useZoom } from "../../zoom/ZoomProvider";
-import ZoomUI from "../../zoom/ZoomUI";
 import { monthLabel } from "../styles";
 import CalendarRow from "./CalendarRow";
 
@@ -29,14 +28,18 @@ export default function FullCalendar({
   time: { start, monthLength },
   event,
   day,
-  commonDayStyle
+  commonDayStyle,
+  zoom,
 }) {
   const theme = useTheme();
-  const { zoom, loaded } = useZoom();
+  // const {zoom, loaded } = useZoom();
   const { highlighted, highlightedProp, highlightInfo } = day;
 
   const month = start;
-  const months = useMemo(() => makeMonths(month, monthLength), [month,monthLength]);
+  const months = useMemo(
+    () => makeMonths(month, monthLength),
+    [month, monthLength]
+  );
 
   const data = originalData.filter((d) =>
     dataOverlapInterval(d.events, {
@@ -54,54 +57,36 @@ export default function FullCalendar({
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
       highlighted(day) ? (
-        <SpecialDay key={i} day={day} specialLabel={highlightInfo(day)} 
-        specialStyle={{...commonDayStyle(day,true,theme)}} first={i == 0}/>
+        <SpecialDay
+          key={i}
+          day={day}
+          specialLabel={highlightInfo(day)}
+          specialStyle={{ ...commonDayStyle(day, true, theme) }}
+          first={i == 0}
+        />
       ) : (
         <Day
           key={i}
           first={i == 0}
           day={day}
-          sx={{...commonDayStyle(day,false,theme)}}
+          sx={{ ...commonDayStyle(day, false, theme) }}
         />
       )
     );
-  }, [days, highlighted, highlightedProp,highlightInfo, theme.palette.mode]);
+  }, [days, highlighted, highlightedProp, highlightInfo, theme.palette.mode]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);
   }, [months]);
-
-  const loadingUI = useMemo(() => {
-    let height = minCellSize + zoom * 5;
-    return [
-      <Skeleton
-        key={0}
-        sx={{ bgcolor: "grey.900" }}
-        variant="rounded"
-        height={height}
-        width="100%"
-      />,
-      days.map((d, i) => (
-        <Skeleton
-          key={i + 1}
-          sx={{ bgcolor: "grey.900" }}
-          variant="rectangle"
-          height={height}
-          width="100%"
-        />
-      )),
-    ];
-  }, [days, zoom]);
 
   return (
     <FullCalendarContext.Provider
       value={{
         days,
         event,
-        commonDayStyle
+        commonDayStyle,
       }}
     >
-      <ZoomUI range={5}/>
       <Box
         sx={{
           gridTemplateColumns: `${10 + zoom}% repeat(${days.length},${
@@ -121,16 +106,18 @@ export default function FullCalendar({
         {monthRow}
         {daysRow}
         {/* Data */}
-        {!loaded
-          ? loadingUI
-          : data.map((d, i) => (
-              <CalendarRow
-                key={i}
-                events={d.events}
-                EventTooltip={EventTooltip}
-                labelProps={{ key:d.key,title: d.labelTitle, LabelComponent: LabelComponent }}
-              />
-            ))}
+        {data.map((d, i) => (
+          <CalendarRow
+            key={i}
+            events={d.events}
+            EventTooltip={EventTooltip}
+            labelProps={{
+              key: d.key,
+              title: d.labelTitle,
+              LabelComponent: LabelComponent,
+            }}
+          />
+        ))}
       </Box>
     </FullCalendarContext.Provider>
   );
@@ -170,14 +157,10 @@ const Day = React.forwardRef(({ day, first, sx = {}, ...props }, ref) => (
 ));
 Day.displayName = "Day";
 
-function SpecialDay({day,specialLabel,specialStyle,first}) {
+function SpecialDay({ day, specialLabel, specialStyle, first }) {
   return (
     <Tooltip title={specialLabel} placement="top" arrow>
-      <Day
-        first={first}
-        day={day}
-        sx={{...specialStyle}}
-      />
+      <Day first={first} day={day} sx={{ ...specialStyle }} />
     </Tooltip>
   );
 }
