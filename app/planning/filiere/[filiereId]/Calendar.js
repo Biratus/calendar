@@ -2,7 +2,10 @@
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Box, Stack, Typography } from "@mui/material";
-import { createContext, useEffect, useMemo } from "react";
+import Link from "next/link";
+import React, {
+  createContext, useEffect
+} from "react";
 import { useCalendar } from "../../(components)/CalendarProvider";
 import { FiliereView } from "../../(components)/CalendarViews";
 import GlobalViewLink from "../../(components)/GlobalViewLink";
@@ -23,7 +26,7 @@ const FiliereContext = createContext();
 
 export default function CalendarFiliere({ name, data }) {
   const filiereData = mapISO(data, ["start", "end"]);
-  const { showLegend, colorOf } = useLegend();
+  const { showLegend, colorOf} = useLegend();
   const { zoom, loaded } = useZoom();
   const { openMenu } = useCalendar();
 
@@ -31,7 +34,6 @@ export default function CalendarFiliere({ name, data }) {
     () => showLegend([...new Set(filiereData.map(({ theme }) => theme))], true),
     []
   );
-  
   return (
     <Stack justifyContent="center" alignItems="center" spacing={2}>
       <Typography variant="h2" align="center">
@@ -40,6 +42,7 @@ export default function CalendarFiliere({ name, data }) {
       <Stack direction="row" justifyContent="space-between" sx={{ width: 0.5 }}>
         <GlobalViewLink view={FiliereView.key} />
         <ZoomUI range={5} />
+        <Link href={`/api/filiere/${name}/pdf`}>Export to PDF</Link>       
       </Stack>
       <Box sx={{ width: viewWidth + zoom * 0.1 }}>
         {!loaded ? (

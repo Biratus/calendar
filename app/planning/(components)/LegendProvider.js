@@ -9,10 +9,15 @@ import Legend from "./Legend";
 const LegendContext = createContext();
 
 export default function LegendProvider({ themes, children }) {
-  const colors = getColorsForLabels(themes);
+  const colors = getColorsForLabels(themes);  
+  
+  const colorOf = (label,raw=false) => {
+    if(raw) return colors[label];
+    return colors[label].rgb;
+  }
   const fullLegend = [
     missingFormateurLegend,
-    ...themes.map((t) => ({ label: t, color: colors[t] })),
+    ...themes.map((t) => ({ label: t, color: colorOf(t) })),
   ];
 
   const [legendList, setLegendList] = useState(fullLegend);
@@ -31,7 +36,7 @@ export default function LegendProvider({ themes, children }) {
     }
   };
 
-  const colorOf = (label) => colors[label];
+
 
   return (
     <LegendContext.Provider value={{ showLegend, colorOf }}>
