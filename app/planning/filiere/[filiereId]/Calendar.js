@@ -3,9 +3,7 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Box, Stack, Typography } from "@mui/material";
 import Link from "next/link";
-import React, {
-  createContext, useEffect
-} from "react";
+import React, { createContext, useEffect } from "react";
 import { useCalendar } from "../../(components)/CalendarProvider";
 import { FiliereView } from "../../(components)/CalendarViews";
 import GlobalViewLink from "../../(components)/GlobalViewLink";
@@ -26,8 +24,8 @@ const FiliereContext = createContext();
 
 export default function CalendarFiliere({ name, modules }) {
   const filiereData = mapISO(modules, ["start", "end"]);
-  const { showLegend, colorOf} = useLegend();
-  const { zoom, loaded } = useZoom();
+  const { showLegend, colorOf } = useLegend();
+  const { zoom } = useZoom();
   const { openMenu } = useCalendar();
 
   useEffect(
@@ -42,29 +40,25 @@ export default function CalendarFiliere({ name, modules }) {
       <Stack direction="row" justifyContent="space-between" sx={{ width: 0.5 }}>
         <GlobalViewLink view={FiliereView.key} />
         <ZoomUI range={5} />
-        <Link href={`/api/filiere/${name}/pdf`}>Export to PDF</Link>       
+        <Link href={`/api/filiere/${name}/pdf`}>Export to PDF</Link>
       </Stack>
       <Box sx={{ width: viewWidth + zoom * 0.1 }}>
-        {!loaded ? (
-          <LoadingBar />
-        ) : (
-          <FiliereContext.Provider
-            value={{
-              color: ({ theme }) => colorOf(theme),
-              eventHighlighted: isFormateurMissing,
-              highlightedProp: missingFormateurStyle,
-              onClick: openMenu,
-            }}
-          >
-            <CalendarDetail
-              context={FiliereContext}
-              cellHeight={`${minCellHeight + zoom * zoomCoef}em`}
-              events={filiereData}
-              additionalLabel="Formateur"
-              AdditionalInfo={FormateurSimple}
-            />
-          </FiliereContext.Provider>
-        )}
+        <FiliereContext.Provider
+          value={{
+            color: ({ theme }) => colorOf(theme),
+            eventHighlighted: isFormateurMissing,
+            highlightedProp: missingFormateurStyle,
+            onClick: openMenu,
+          }}
+        >
+          <CalendarDetail
+            context={FiliereContext}
+            cellHeight={`${minCellHeight + zoom * zoomCoef}em`}
+            events={filiereData}
+            additionalLabel="Formateur"
+            AdditionalInfo={FormateurSimple}
+          />
+        </FiliereContext.Provider>
       </Box>
     </Stack>
   );

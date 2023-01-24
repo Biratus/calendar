@@ -27,7 +27,7 @@ export default function CalendarFormateur({
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
-  const { zoom, loaded } = useZoom();
+  const { zoom } = useZoom();
 
   useEffect(
     () => showLegend([...new Set(formateurData.map(({ theme }) => theme))]),
@@ -44,10 +44,7 @@ export default function CalendarFormateur({
         <ZoomUI range={5} />
       </Stack>
       <MonthNavigation />
-      {!loaded ? (
-        <LoadingBar />
-      ) : (
-        <CalendarSimple
+      <CalendarSimple
           time={{ start: month, monthLength: 3 }}
           events={formateurData}
           zoom={zoom}
@@ -65,7 +62,6 @@ export default function CalendarFormateur({
             width: viewWidth + zoom * 0.1,
           }}
         />
-      )}
     </Stack>
   );
 }

@@ -19,7 +19,7 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
-  const { zoom, loaded } = useZoom();
+  const { zoom } = useZoom();
   useEffect(() => showLegend(), []);
 
   // Props passed to Calendar
@@ -49,7 +49,6 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
     () => <CalendarFormateur {...commonProps} />,
     [modules, month, zoom]
   );
-  if (!loaded) return <LoadingBar />;
 
   return (
     <>

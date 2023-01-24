@@ -1,6 +1,7 @@
 "use client";
 import { createContext, useContext } from "react";
 import { useLocalStorage } from "../../hooks/localStorageHook";
+import { LoadingBar } from "../LoadingBar";
 
 const ZoomContext = createContext();
 
@@ -9,10 +10,10 @@ export default function ZoomProvider({
   defaultCoef = 1,
   children,
 }) {
-  const [zoom, setZoom, loaded] = useLocalStorage(storageKey, defaultCoef);
+  const [zoom, setZoom,loaded] = useLocalStorage(storageKey, defaultCoef);
   return (
-    <ZoomContext.Provider value={{ zoom, setZoom, loaded }}>
-      {children}
+    <ZoomContext.Provider value={{ zoom, setZoom }}>
+      {loaded?children:<LoadingBar/>}
     </ZoomContext.Provider>
   );
 }

@@ -32,7 +32,6 @@ export default function FullCalendar({
   zoom,
 }) {
   const theme = useTheme();
-  // const {zoom, loaded } = useZoom();
   const { highlighted, highlightedProp, highlightInfo } = day;
 
   const month = start;
