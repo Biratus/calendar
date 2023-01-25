@@ -40,6 +40,7 @@ export default function FullCalendar({
     [month, monthLength]
   );
 
+  // Only display data that is within the month interval
   const data = originalData.filter((d) =>
     dataOverlapInterval(d.events, {
       start: startOfMonth(months[0].day),
@@ -93,7 +94,7 @@ export default function FullCalendar({
           }px)`,
           gridTemplateRows: `1fr 1fr ${
             data.length
-              ? `repeat(${data.length},${minCellSize + zoom * 5}px)`
+              ? `repeat(${data.length},${cellHeight(zoom)}px)`
               : ""
           }`,
           display: "grid",
@@ -169,3 +170,7 @@ const dataOverlapInterval = (data, interval) => {
     areIntervalsOverlapping({ start, end }, interval, { inclusive: true })
   );
 };
+
+export function cellHeight(coef) {
+  return minCellSize + coef * 5;
+}

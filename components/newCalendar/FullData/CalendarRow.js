@@ -12,7 +12,7 @@ export default function CalendarRow({
   EventTooltip,
 }) {
   const theme = useTheme();
-  const { days,commonDayStyle } = useContext(FullCalendarContext);
+  const { days, commonDayStyle } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
   return (
     <>
@@ -34,7 +34,7 @@ export default function CalendarRow({
             sx={{
               textAlign: "center",
               borderLeft: "1px solid gray",
-              ...commonDayStyle(day.date,false,theme)
+              ...commonDayStyle(day.date, false, theme),
             }}
           ></Box>
         );
@@ -61,12 +61,15 @@ function mergeDaysAndEvent(days, events, limit) {
     }
 
     let evt = eventOf(d);
-    if (evt) {
-      evt.duration = eachDayOfInterval({
-        start: evt.start,
-        end: evt.end.getTime() > limit ? limit : evt.end,
-      }).length;
-      currSkip = evt.duration - 1;
+    if (evt) {// Make cell span for duration of event if within time interval
+      evt.span =
+        evt.end.getTime() > limit
+          ? eachDayOfInterval({
+              start: evt.start,
+              end: limit,
+            }).length
+          : evt.duration;
+      currSkip = evt.span - 1;
       newDays.push({ date: d, event: evt });
     } else newDays.push({ date: d });
   }
