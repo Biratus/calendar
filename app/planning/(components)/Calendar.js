@@ -1,27 +1,33 @@
 "use client";
 import { useEffect, useMemo } from "react";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   calendarDayStyle,
-  missingFormateurStyle,
+  missingFormateurStyle
 } from "../../../components/newCalendar/styles";
 import { useZoom } from "../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../components/zoom/ZoomUI";
 import {
-  mergeModule,
-  moduleOverlap,
-  toCalendarData,
+  toCalendarData
 } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
+import CalendarFiliere from "./CalendarFiliere";
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView, FormateurView } from "./CalendarViews";
 import { useLegend } from "./LegendProvider";
 import { useMonthNavigation } from "./MonthNavigationProvider";
 
-export default function CommonCalendar({ modules, view, monthLength = 3 }) {
-  const { openMenu, showOverlapModules, isJoursFeries, getJourFeries } =
-    useCalendar();
+export default function CommonCalendar({
+  modules,
+  view,
+  monthLength = 3,
+}) {
+  const {
+    openMenu,
+    showOverlapModules,
+    isJoursFeries,
+    getJourFeries,
+  } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
   const { zoom } = useZoom();
@@ -56,7 +62,7 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
 
   const onClickFiliere = (mod, ref) => {
     if (mod.overlap) {
-      showOverlapModules(mod,ref);
+      showOverlapModules(mod, ref);
     } else openMenu(mod, ref);
   };
   const calendarFiliere = useMemo(
@@ -83,39 +89,6 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
   );
 }
 
-function CalendarFiliere({ modules, ...props }) {
-  const calendarData = toCalendarData(modules, "filiere", FiliereView, true);
-
-  for (let filiere of calendarData) {
-    let newEvents = [];
-    for (let mod of filiere.events) {
-      let overlap = false;
-      for (let eventIndex in newEvents) {
-        let event = newEvents[eventIndex];
-        if (moduleOverlap(mod, event)) {
-          overlap = true;
-          event.label = (
-            <>
-              <WarningAmberIcon color="error" /> Modules superposés
-            </>
-          );
-          newEvents[eventIndex] = mergeModule(event, mod);
-        }
-      }
-      if (!overlap) newEvents.push(mod);
-    }
-    filiere.events = newEvents;
-  }
-
-  return (
-    <FullCalendar
-      data={calendarData}
-      EventTooltip={FiliereView.EventTooltip}
-      LabelComponent={FiliereView.LabelComponent}
-      {...props}
-    />
-  );
-}
 
 function CalendarFormateur({ modules, ...props }) {
   const calendarData = toCalendarData(

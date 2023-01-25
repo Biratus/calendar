@@ -12,21 +12,32 @@ export default function CalendarRow({
   EventTooltip,
 }) {
   const theme = useTheme();
-  const { days, commonDayStyle } = useContext(FullCalendarContext);
+  const {
+    days,
+    commonDayStyle,
+    drag: { enter, leave, move, drop },
+  } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
+
   return (
     <>
       <Tooltip title={labelTitle} arrow placement="right">
         <LabelComponent labelKey={labelKey} />
       </Tooltip>
       {daysAndEvents.map((day, id) => {
+        const dragEvents = {
+          onDragOver: (evt) => move(day, labelKey, evt),
+          onDragEnter: (evt) => enter(day, labelKey, evt),
+          onDragLeave: (evt) => leave(day, labelKey, evt),
+          onDrop: (evt) => drop(day,labelKey, evt),
+        };
         return day.event ? (
           EventTooltip ? (
             <EventTooltip key={id} event={day.event}>
-              <CalendarEvent key={id} day={day} />
+              <CalendarEvent key={id} day={day} {...dragEvents} />
             </EventTooltip>
           ) : (
-            <CalendarEvent key={id} day={day} />
+            <CalendarEvent key={id} day={day} {...dragEvents} />
           )
         ) : (
           <Box
@@ -36,6 +47,7 @@ export default function CalendarRow({
               borderLeft: "1px solid gray",
               ...commonDayStyle(day.date, false, theme),
             }}
+            {...dragEvents}
           ></Box>
         );
       })}
@@ -61,7 +73,8 @@ function mergeDaysAndEvent(days, events, limit) {
     }
 
     let evt = eventOf(d);
-    if (evt) {// Make cell span for duration of event if within time interval
+    if (evt) {
+      // Make cell span for duration of event if within time interval
       evt.span =
         evt.end.getTime() > limit
           ? eachDayOfInterval({

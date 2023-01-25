@@ -1,30 +1,37 @@
 "use client";
 import { Backdrop, Box, Stack, Typography } from "@mui/material";
 import { eachDayOfInterval } from "date-fns";
+import { useState } from "react";
 
 export default function OverlapModuleOverlay({
   anchorEl,
   onClose,
   selectModule,
-  data
+  data,
 }) {
-    console.log({data});
+  const [backdropOpen, setBackDropOpen] = useState(Boolean(anchorEl));
   const cellWidth = anchorEl.clientWidth / data.duration;
-  console.log('cellWidth',cellWidth);
 
   const dayOffset = (mod) => {
-    return eachDayOfInterval({
-        start:data.start,end:mod.start
-    }).length-1;
-  }
+    return (
+      eachDayOfInterval({
+        start: data.start,
+        end: mod.start,
+      }).length - 1
+    );
+  };
+
+  const dragStart = (mod, evt) => {
+    selectModule(mod, evt.currentTarget);
+    setBackDropOpen(false);
+  };
   return (
     <Backdrop
       sx={{
         color: "#fff",
-        opacity: 0.5,
         zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
-      open={Boolean(anchorEl)}
+      open={backdropOpen}
       onClick={onClose}
     >
       <Stack
@@ -40,21 +47,25 @@ export default function OverlapModuleOverlay({
         {data.overlappedModules.map((mod, i) => (
           <Box
             key={i}
-            onClick={(evt) => selectModule(mod,evt.currentTarget)}
+            draggable
+            onDragStart={(evt) => dragStart(mod, evt)}
+            onDragEnd={onClose}
             sx={{
-                alignItems:'center',
-              height:`${anchorEl.clientHeight}`,
-              width:`${mod.duration*cellWidth}px`,
-              backgroundColor:'lightblue',
-              color:'black',
-              marginLeft:`${dayOffset(mod)*cellWidth}px`,
-              cursor:'grab',
-              '&:hover':{
-                backgroundColor:"blue"
-              }
+              alignItems: "center",
+              height: `${anchorEl.clientHeight}`,
+              width: `${mod.duration * cellWidth}px`,
+              backgroundColor: "lightblue",
+              color: "black",
+              marginLeft: `${dayOffset(mod) * cellWidth}px`,
+              cursor: "grab",
+              "&:hover": {
+                backgroundColor: "blue",
+              },
             }}
           >
-            <Typography sx={{display:'flex'}} noWrap>{mod.name}</Typography>
+            <Typography sx={{ display: "flex" }} noWrap>
+              {mod.name}
+            </Typography>
           </Box>
         ))}
       </Stack>

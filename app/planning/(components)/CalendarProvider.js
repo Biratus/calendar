@@ -8,6 +8,7 @@ import {
   useContext,
   useMemo,
   useReducer,
+  useRef,
 } from "react";
 import SplitModuleModal from "../../../components/modals/SplitModuleModal";
 import SwitchFormateurModal from "../../../components/modals/SwitchFormateurModal";
@@ -33,6 +34,13 @@ export default function CalendarProvider({ joursFeries, children }) {
     hoverReducer,
     hoverElementsInit
   );
+
+  // Drag
+  const draggedModule= useRef(null);
+
+  const dragEnd = (evt) => {
+    console.log('dragEnd',evt);
+  }
 
   // Menu Stuffs
   const menuItems = [
@@ -106,7 +114,7 @@ export default function CalendarProvider({ joursFeries, children }) {
 
   return (
     <CalendarContext.Provider
-      value={{ openMenu, showOverlapModules, isJoursFeries, getJourFeries }}
+      value={{ openMenu, showOverlapModules, isJoursFeries, getJourFeries,draggedModule:() => draggedModule.current }}
     >
       {children}
       {hoverProps.openMenu && <PopUpMenu
@@ -137,7 +145,8 @@ export default function CalendarProvider({ joursFeries, children }) {
           onClose={closeOverlapModuleOverlay}
           data={hoverProps.module}
           selectModule={(mod) => {
-            console.log("Selected",{mod});
+            draggedModule.current=mod;
+            // closeOverlapModuleOverlay();
           }}
         />
       )}

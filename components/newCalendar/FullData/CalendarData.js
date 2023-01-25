@@ -30,6 +30,7 @@ export default function FullCalendar({
   day,
   commonDayStyle,
   zoom,
+  drag
 }) {
   const theme = useTheme();
   const { highlighted, highlightedProp, highlightInfo } = day;
@@ -85,6 +86,7 @@ export default function FullCalendar({
         days,
         event,
         commonDayStyle,
+        drag
       }}
     >
       <Box
