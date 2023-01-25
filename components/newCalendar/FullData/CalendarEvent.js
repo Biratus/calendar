@@ -31,16 +31,16 @@ const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
       sx={{
         ...style,
         ...commonDayStyle(date,false,theme),
+        gridColumnEnd: `span ${event.duration}`,
         background: `radial-gradient(circle, ${color(
           event
         )} 30%, rgba(148,187,233,0) 100%)`,
-        ...(highlighted && highlightedProp(color(event))),
-        gridColumnEnd: `span ${event.duration}`,
+        ...(highlighted && highlightedProp(event)),
       }}
       onClick={(evt) => onClick(event, evt.currentTarget)}
       {...props}
     >
-      {event.duration > 1 && <Typography noWrap>{event.label}</Typography>}
+      {event.duration > 1 && <Typography sx={{display:'flex'}} noWrap>{event.label}</Typography>}
     </Box>
   );
 }
