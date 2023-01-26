@@ -45,7 +45,7 @@ export default function CalendarRow({
             sx={{
               textAlign: "center",
               borderLeft: "1px solid gray",
-              ...commonDayStyle(day.date, false, theme),
+              ...commonDayStyle(day.date, theme),
             }}
             {...dragEvents}
           ></Box>

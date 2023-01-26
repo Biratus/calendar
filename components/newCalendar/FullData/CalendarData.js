@@ -33,7 +33,7 @@ export default function FullCalendar({
   drag
 }) {
   const theme = useTheme();
-  const { highlighted, highlightedProp, highlightInfo } = day;
+  const { tooltip:{hasTooltip,tooltipInfo},styleProps } = day;
 
   const month = start;
   const months = useMemo(
@@ -57,12 +57,12 @@ export default function FullCalendar({
 
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
-      highlighted(day) ? (
+    hasTooltip(day) ? (
         <SpecialDay
           key={i}
           day={day}
-          specialLabel={highlightInfo(day)}
-          specialStyle={{ ...commonDayStyle(day, true, theme) }}
+          specialLabel={tooltipInfo(day)}
+          specialStyle={styleProps(day, theme)}
           first={i == 0}
         />
       ) : (
@@ -70,11 +70,11 @@ export default function FullCalendar({
           key={i}
           first={i == 0}
           day={day}
-          sx={{ ...commonDayStyle(day, false, theme) }}
+          sx={styleProps(day, theme)}
         />
       )
     );
-  }, [days, highlighted, highlightedProp, highlightInfo, theme.palette.mode]);
+  }, [days,hasTooltip,tooltipInfo,styleProps, theme.palette.mode]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);

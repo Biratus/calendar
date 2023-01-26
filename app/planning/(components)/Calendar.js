@@ -3,13 +3,11 @@ import { useEffect, useMemo } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   calendarDayStyle,
-  missingFormateurStyle
+  missingFormateurStyle,
 } from "../../../components/newCalendar/styles";
 import { useZoom } from "../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../components/zoom/ZoomUI";
-import {
-  toCalendarData
-} from "../../../lib/calendar";
+import { toCalendarData } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
 import CalendarFiliere from "./CalendarFiliere";
 import { useCalendar } from "./CalendarProvider";
@@ -17,17 +15,9 @@ import { FiliereView, FormateurView } from "./CalendarViews";
 import { useLegend } from "./LegendProvider";
 import { useMonthNavigation } from "./MonthNavigationProvider";
 
-export default function CommonCalendar({
-  modules,
-  view,
-  monthLength = 3,
-}) {
-  const {
-    openMenu,
-    showOverlapModules,
-    isJoursFeries,
-    getJourFeries,
-  } = useCalendar();
+export default function CommonCalendar({ modules, view, monthLength = 3 }) {
+  const { openMenu, showOverlapModules, isJoursFeries, getJourFeries } =
+    useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
   const { zoom } = useZoom();
@@ -54,8 +44,17 @@ export default function CommonCalendar({
       },
     },
     day: {
-      highlighted: isJoursFeries,
-      highlightInfo: getJourFeries,
+      tooltip: {
+        hasTooltip: isJoursFeries,
+        tooltipInfo: getJourFeries,
+      },
+      styleProps: (date, theme) => {
+        let style = {
+          ...calendarDayStyle(date, theme),
+        };
+        if (isJoursFeries(date)) style.color = "red";
+        return style;
+      }
     },
     commonDayStyle: calendarDayStyle,
   };
@@ -88,7 +87,6 @@ export default function CommonCalendar({
     </>
   );
 }
-
 
 function CalendarFormateur({ modules, ...props }) {
   const calendarData = toCalendarData(
