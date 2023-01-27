@@ -31,7 +31,7 @@ const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
     ref={ref}
       sx={{
         ...style,
-        ...commonDayStyle(date,false,theme),
+        ...commonDayStyle(date,theme),
         gridColumnEnd: `span ${event.span}`,
         background: `radial-gradient(circle, ${color(
           event
