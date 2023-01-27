@@ -12,6 +12,7 @@ export default function LegendProvider({ themes, children }) {
   const colors = getColorsForLabels(themes);  
   
   const colorOf = (label,raw=false) => {
+    if(!colors[label]) throw new Error('No matching color for ',label);
     if(raw) return colors[label];
     return colors[label].rgb;
   }

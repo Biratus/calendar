@@ -4,14 +4,14 @@ import {
   eachDayOfInterval,
   formatISO,
   isSameDay,
-  isWithinInterval,
+  isWithinInterval
 } from "date-fns";
 import { useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   mergeModule,
   moduleOverlap,
-  toCalendarData,
+  toCalendarData
 } from "../../../lib/calendar";
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView } from "./CalendarViews";
@@ -24,42 +24,15 @@ export default function CalendarFiliere({
 }) {
   const [modules, setModules] = useState(originalModules);
   const calendarData = useMemo(
-    () => toCalendarData(modules, "filiere", FiliereView, true),
+    () => {
+      const data =  toCalendarData(modules, "filiere", FiliereView, true);
+      checkOverlapModules(data);
+      return data;},
     [modules]
   );
   const { showOverlapModules, draggedModule, setDraggedModule } = useCalendar();
   // DropTarget: interval de drop
   const [dropTarget, setDropTarget] = useState(null);
-
-  // check overlapping modules
-  for (let filiere of calendarData) {
-    let newEvents = [];
-    for (let mod of filiere.events) {
-      let overlap = null;
-      for (let eventIndex in newEvents) {
-        let event = newEvents[eventIndex];
-        if (moduleOverlap(mod, event)) {
-          if (overlap) {
-            overlap = mergeModule(overlap, event);
-          } else {
-            overlap = mergeModule(event, mod);
-          }
-          newEvents.splice(eventIndex, 1);
-        }
-      }
-      if (!overlap) newEvents.push(mod);
-      else {
-        overlap.duration = eachDayOfInterval(overlap).length;
-        overlap.label = (
-          <>
-            <WarningAmberIcon color="error" /> Modules superposés
-          </>
-        );
-        newEvents.push(overlap);
-      }
-    }
-    filiere.events = newEvents;
-  }
 
   const isDropTarget = (day) => {
     return dropTarget && isWithinInterval(day, dropTarget);
@@ -77,9 +50,10 @@ export default function CalendarFiliere({
     } else {
       // Day with event accross multiple days
       // Calculate on which day it was droped
+      let rect = evt.currentTarget.getBoundingClientRect();
       targetDay = getTargetDay(dayAndEvent.event, {
         targetWidth: evt.currentTarget.clientWidth,
-        mouseOffsetX: evt.nativeEvent.layerX,
+        mouseOffsetX: evt.clientX-rect.x,
       });
     }
     if (!dropTarget || !isSameDay(targetDay, dropTarget.start)) {
@@ -161,4 +135,38 @@ function getTargetDay(targetModule, { targetWidth, mouseOffsetX }) {
   let targetDuration = targetModule.duration;
   const dayOffset = Math.floor(mouseOffsetX / (targetWidth / targetDuration));
   return addDays(targetModule.start, dayOffset);
+}
+
+function checkOverlapModules(data) {
+  for (let filiere of data) {
+    let newEvents = [];
+    for (let mod of filiere.events) {
+      let overlap = null;
+      for (let eventIndex in newEvents) {
+        let event = newEvents[eventIndex];
+        if (moduleOverlap(mod, event)) {
+          if (overlap) {
+            overlap = mergeModule(overlap, event);
+          } else {
+            overlap = mergeModule(event, mod);
+          }
+          newEvents.splice(eventIndex, 1);
+        }
+      }
+      if (!overlap) newEvents.push(mod);
+      else {
+        overlap.duration = eachDayOfInterval(overlap).length;
+        overlap.label =
+          overlap.duration > 1 ? (
+            <>
+              <WarningAmberIcon color="error" sx={{verticalAlign:'middle'}} /> Modules superposés
+            </>
+          ) : (
+            <WarningAmberIcon color="error" sx={{verticalAlign:'middle'}} />
+          );
+        newEvents.push(overlap);
+      }
+    }
+    filiere.events = newEvents;
+  }
 }

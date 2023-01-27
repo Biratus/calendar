@@ -38,10 +38,6 @@ export default function CalendarProvider({ joursFeries, children }) {
   // Drag
   const draggedModule= useRef(null);
 
-  const dragEnd = (evt) => {
-    console.log('dragEnd',evt);
-  }
-
   // Menu Stuffs
   const menuItems = [
     {

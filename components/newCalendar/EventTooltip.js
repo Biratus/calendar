@@ -13,10 +13,10 @@ export default function EventTooltip({
   );
 }
 
-function TooltipContent({event:{label,start,end},additionalInfos}) {
+function TooltipContent({event:{name,start,end},additionalInfos}) {
   return (<>
     <Typography variant="h5" gutterBottom>
-      {label}
+      {name}
     </Typography>
     <Typography variant="subtitle1">
       Début : <b>{formatFullDate(start)}</b>

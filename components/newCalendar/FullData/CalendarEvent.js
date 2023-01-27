@@ -10,27 +10,25 @@ const style = {
   alignItems: "center",
   px: 1,
   cursor: "pointer",
-  textOverflow: "ellipsis",
-  overflow: "hidden",
-  whiteSpace: "nowrap",
   "&:hover": {
     opacity: 0.6,
   },
 };
 
-const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
+const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
   const theme = useTheme();
-  const {commonDayStyle,
-    event: { highlighted: eventHighlighted, highlightedProp, onClick, color }
+  const {
+    commonDayStyle,
+    event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
   } = useContext(FullCalendarContext);
 
   const highlighted = event && eventHighlighted(event);
   return (
     <Box
-    ref={ref}
+      ref={ref}
       sx={{
         ...style,
-        ...commonDayStyle(date,theme),
+        ...commonDayStyle(date, theme),
         gridColumnEnd: `span ${event.span}`,
         background: `radial-gradient(circle, ${color(
           event
@@ -40,10 +38,11 @@ const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
       onClick={(evt) => onClick(event, evt.currentTarget)}
       {...props}
     >
-      {event.duration > 1 && <Typography sx={{display:'flex'}} noWrap>{event.label}</Typography>}
+      <Typography noWrap>
+        {event.label}
+      </Typography>
     </Box>
   );
-}
-);
-CalendarEvent.displayName="CalendarEvent";
+});
+CalendarEvent.displayName = "CalendarEvent";
 export default CalendarEvent;
