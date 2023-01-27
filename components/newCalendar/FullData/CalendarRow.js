@@ -15,7 +15,7 @@ export default function CalendarRow({
   const {
     days,
     commonDayStyle,
-    drag: { enter, leave, move, drop },
+    drag: { enter, leave, move, drop,drag },
   } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
 
@@ -26,6 +26,7 @@ export default function CalendarRow({
       </Tooltip>
       {daysAndEvents.map((day, id) => {
         const dragEvents = {
+          onDrag: (evt) => drag(day,labelKey,evt),
           onDragOver: (evt) => move(day, labelKey, evt),
           onDragEnter: (evt) => enter(day, labelKey, evt),
           onDragLeave: (evt) => leave(day, labelKey, evt),
@@ -34,10 +35,10 @@ export default function CalendarRow({
         return day.event ? (
           EventTooltip ? (
             <EventTooltip key={id} event={day.event}>
-              <CalendarEvent key={id} day={day} {...dragEvents} />
+              <CalendarEvent key={id} day={day} {...dragEvents} draggable />
             </EventTooltip>
           ) : (
-            <CalendarEvent key={id} day={day} {...dragEvents} />
+            <CalendarEvent key={id} day={day} {...dragEvents} draggable />
           )
         ) : (
           <Box

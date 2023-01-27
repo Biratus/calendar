@@ -21,8 +21,7 @@ const style = {
 const CalendarEvent = forwardRef(({ day: { date, event },...props },ref) => {
   const theme = useTheme();
   const {commonDayStyle,
-    event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
-    drag:{enter,leave,move,drop}
+    event: { highlighted: eventHighlighted, highlightedProp, onClick, color }
   } = useContext(FullCalendarContext);
 
   const highlighted = event && eventHighlighted(event);

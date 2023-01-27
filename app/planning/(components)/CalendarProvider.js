@@ -62,7 +62,7 @@ export default function CalendarProvider({ joursFeries, children }) {
   -------------------------- */
   const openMenu = (event, ref) =>
     hoverDispatch({
-      type: "OPEN",
+      type: "OPEN_MENU",
       value: { anchor: ref, module: event },
     });
 
@@ -114,10 +114,10 @@ export default function CalendarProvider({ joursFeries, children }) {
 
   return (
     <CalendarContext.Provider
-      value={{ openMenu, showOverlapModules, isJoursFeries, getJourFeries,draggedModule:() => draggedModule.current }}
+      value={{ openMenu, showOverlapModules, isJoursFeries, getJourFeries,draggedModule:() => draggedModule.current,setDraggedModule:(elt) => draggedModule.current=elt }}
     >
       {children}
-      {hoverProps.openMenu && <PopUpMenu
+      {hoverProps.menuOpen && <PopUpMenu
         anchorEl={hoverProps.anchorEl}
         onClose={() => hoverDispatch({ type: "CLOSE_MENU" })}
         header={hoverProps.module?.label}
@@ -155,7 +155,7 @@ export default function CalendarProvider({ joursFeries, children }) {
 }
 const hoverReducer = (state, action) => {
   switch (action.type) {
-    case "OPEN":
+    case "OPEN_MENU":
       state.menuOpen = true;
       state.anchorEl = action.value.anchor;
       state.module = action.value.module;

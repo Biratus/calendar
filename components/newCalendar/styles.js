@@ -7,7 +7,7 @@ export const monthLabel = {
 }
 
 export const day = {
-    borderLeft:'1px solid gray',
+    borderLeft:'1px solid gray'
 }
 
 export const weekend = {

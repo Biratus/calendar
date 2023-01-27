@@ -16,7 +16,7 @@ import { useLegend } from "./LegendProvider";
 import { useMonthNavigation } from "./MonthNavigationProvider";
 
 export default function CommonCalendar({ modules, view, monthLength = 3 }) {
-  const { openMenu, showOverlapModules, isJoursFeries, getJourFeries } =
+  const { openMenu, isJoursFeries, getJourFeries } =
     useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
@@ -59,16 +59,10 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
     commonDayStyle: calendarDayStyle,
   };
 
-  const onClickFiliere = (mod, ref) => {
-    if (mod.overlap) {
-      showOverlapModules(mod, ref);
-    } else openMenu(mod, ref);
-  };
   const calendarFiliere = useMemo(
     () => (
       <CalendarFiliere
         {...commonProps}
-        event={{ ...commonProps.event, onClick: onClickFiliere }}
       />
     ),
     [modules, month, zoom]

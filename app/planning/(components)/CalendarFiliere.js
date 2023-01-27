@@ -1,6 +1,12 @@
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import { addDays, eachDayOfInterval, formatISO, isSameDay, isWithinInterval } from "date-fns";
-import { useState } from "react";
+import {
+  addDays,
+  eachDayOfInterval,
+  formatISO,
+  isSameDay,
+  isWithinInterval,
+} from "date-fns";
+import { useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   mergeModule,
@@ -10,11 +16,18 @@ import {
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView } from "./CalendarViews";
 
-export default function CalendarFiliere({ modules, day, ...props }) {
-  const [calendarData, setCalendarData] = useState(() =>
-    toCalendarData(modules, "filiere", FiliereView, true)
+export default function CalendarFiliere({
+  modules: originalModules,
+  day,
+  event,
+  ...props
+}) {
+  const [modules, setModules] = useState(originalModules);
+  const calendarData = useMemo(
+    () => toCalendarData(modules, "filiere", FiliereView, true),
+    [modules]
   );
-  const { draggedModule } = useCalendar();
+  const { showOverlapModules, draggedModule, setDraggedModule } = useCalendar();
   // DropTarget: interval de drop
   const [dropTarget, setDropTarget] = useState(null);
 
@@ -26,12 +39,12 @@ export default function CalendarFiliere({ modules, day, ...props }) {
       for (let eventIndex in newEvents) {
         let event = newEvents[eventIndex];
         if (moduleOverlap(mod, event)) {
-          if(overlap) {
-            overlap = mergeModule(overlap,event);
+          if (overlap) {
+            overlap = mergeModule(overlap, event);
           } else {
-            overlap = mergeModule(event,mod);
+            overlap = mergeModule(event, mod);
           }
-          newEvents.splice(eventIndex,1);
+          newEvents.splice(eventIndex, 1);
         }
       }
       if (!overlap) newEvents.push(mod);
@@ -47,7 +60,6 @@ export default function CalendarFiliere({ modules, day, ...props }) {
     }
     filiere.events = newEvents;
   }
-  console.log({calendarData})
 
   const isDropTarget = (day) => {
     return dropTarget && isWithinInterval(day, dropTarget);
@@ -79,12 +91,12 @@ export default function CalendarFiliere({ modules, day, ...props }) {
   };
 
   const dropModule = () => {
-    modules = modules.filter((m) => m.id != draggedModule().id);
+    const newModules = modules.filter((m) => m.id != draggedModule().id);
     let newModule = draggedModule();
     newModule.start = formatISO(dropTarget.start);
     newModule.end = formatISO(dropTarget.end);
-    modules.push(newModule);
-    setCalendarData(toCalendarData(modules, "filiere", FiliereView, true));
+    newModules.push(newModule);
+    setModules(newModules);
     cleanDropTarget();
   };
 
@@ -102,13 +114,24 @@ export default function CalendarFiliere({ modules, day, ...props }) {
           return style;
         },
       }}
+      event={{
+        ...event,
+        onClick: (mod, ref) => {
+          if (mod.overlap) {
+            showOverlapModules(mod, ref);
+          } else event.onClick(mod, ref);
+        },
+      }}
       drag={{
+        drag: (dayAndEvent, row, evt) => {
+          if (!dayAndEvent.event.overlap) setDraggedModule(dayAndEvent.event);
+          else evt.preventDefault();
+        },
         enter: (dayAndEvent, row, evt) => {
           if (draggedModule().filiere !== row) {
             cleanDropTarget();
             return;
           }
-          // console.log("enter", evt);
           changeDropTarget(dayAndEvent, evt);
         },
         leave: (dayAndEvent, row, evt) => {
