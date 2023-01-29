@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, useTheme } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { forwardRef, useContext } from "react";
 import { FullCalendarContext } from "./CalendarData";
@@ -16,7 +16,6 @@ const style = {
 };
 
 const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
-  const theme = useTheme();
   const {
     commonDayStyle,
     event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
@@ -26,7 +25,7 @@ const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
   return (
     <Box
       ref={ref}
-      sx={{
+      sx={(theme) => ({
         ...style,
         ...commonDayStyle(date, theme),
         gridColumnEnd: `span ${event.span}`,
@@ -34,13 +33,11 @@ const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
           event
         )} 30%, rgba(148,187,233,0) 100%)`,
         ...(highlighted && highlightedProp(event)),
-      }}
+      })}
       onClick={(evt) => onClick(event, evt.currentTarget)}
       {...props}
     >
-      <Typography noWrap>
-        {event.label}
-      </Typography>
+      <Typography noWrap>{event.label}</Typography>
     </Box>
   );
 });

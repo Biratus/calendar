@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Tooltip, useTheme } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import {
   areIntervalsOverlapping,
   eachDayOfInterval,
@@ -30,10 +30,12 @@ export default function FullCalendar({
   day,
   commonDayStyle,
   zoom,
-  drag
+  drag,
 }) {
-  const theme = useTheme();
-  const { tooltip:{hasTooltip,tooltipInfo},styleProps } = day;
+  const {
+    tooltip: { hasTooltip, tooltipInfo },
+    styleProps,
+  } = day;
 
   const month = start;
   const months = useMemo(
@@ -57,12 +59,12 @@ export default function FullCalendar({
 
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
-    hasTooltip(day) ? (
+      hasTooltip(day) ? (
         <SpecialDay
           key={i}
           day={day}
           specialLabel={tooltipInfo(day)}
-          specialStyle={styleProps(day, theme)}
+          specialStyle={(theme) => styleProps(day, theme)}
           first={i == 0}
         />
       ) : (
@@ -70,11 +72,11 @@ export default function FullCalendar({
           key={i}
           first={i == 0}
           day={day}
-          sx={styleProps(day, theme)}
+          sx={(theme) => styleProps(day, theme)}
         />
       )
     );
-  }, [days,hasTooltip,tooltipInfo,styleProps, theme.palette.mode]);
+  }, [days, hasTooltip, tooltipInfo, styleProps]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);
@@ -86,7 +88,7 @@ export default function FullCalendar({
         days,
         event,
         commonDayStyle,
-        drag
+        drag,
       }}
     >
       <Box
@@ -95,9 +97,7 @@ export default function FullCalendar({
             minCellSize + zoom * 5
           }px)`,
           gridTemplateRows: `1fr 1fr ${
-            data.length
-              ? `repeat(${data.length},${cellHeight(zoom)}px)`
-              : ""
+            data.length ? `repeat(${data.length},${cellHeight(zoom)}px)` : ""
           }`,
           display: "grid",
           pb: "1em",
@@ -145,11 +145,11 @@ function Month({ month: { nbOfDays, day }, first }) {
 
 const Day = React.forwardRef(({ day, first, sx = {}, ...props }, ref) => (
   <Box
-    sx={{
+    sx={(theme) => ({
       textAlign: "center",
       gridColumnStart: first ? 2 : "auto",
-      ...sx,
-    }}
+      ...sx(theme),
+    })}
     ref={ref}
     {...props}
   >
@@ -162,7 +162,7 @@ Day.displayName = "Day";
 function SpecialDay({ day, specialLabel, specialStyle, first }) {
   return (
     <Tooltip title={specialLabel} placement="top" arrow>
-      <Day first={first} day={day} sx={{ ...specialStyle }} />
+      <Day first={first} day={day} sx={specialStyle} />
     </Tooltip>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Tooltip, useTheme } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { eachDayOfInterval, isWithinInterval } from "date-fns";
 import { useContext } from "react";
 import { FullCalendarContext } from "./CalendarData";
@@ -11,11 +11,10 @@ export default function CalendarRow({
   labelProps: { key: labelKey, title: labelTitle, LabelComponent },
   EventTooltip,
 }) {
-  const theme = useTheme();
   const {
     days,
     commonDayStyle,
-    drag: { enter, leave, move, drop,drag },
+    drag: { enter, leave, move, drop, drag },
   } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
 
@@ -26,11 +25,11 @@ export default function CalendarRow({
       </Tooltip>
       {daysAndEvents.map((day, id) => {
         const dragEvents = {
-          onDrag: (evt) => drag(day,labelKey,evt),
+          onDrag: (evt) => drag(day, labelKey, evt),
           onDragOver: (evt) => move(day, labelKey, evt),
           onDragEnter: (evt) => enter(day, labelKey, evt),
           onDragLeave: (evt) => leave(day, labelKey, evt),
-          onDrop: (evt) => drop(day,labelKey, evt),
+          onDrop: (evt) => drop(day, labelKey, evt),
         };
         return day.event ? (
           EventTooltip ? (
@@ -43,11 +42,11 @@ export default function CalendarRow({
         ) : (
           <Box
             key={id}
-            sx={{
+            sx={(theme) => ({
               textAlign: "center",
               borderLeft: "1px solid gray",
               ...commonDayStyle(day.date, theme),
-            }}
+            })}
             {...dragEvents}
           ></Box>
         );

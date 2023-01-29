@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack, Tooltip, Typography, useTheme } from "@mui/material";
+import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { isSameDay } from "date-fns";
 import { useContext } from "react";
 import { formatDayDate } from "../../../lib/date";
@@ -17,7 +17,6 @@ const cellStyle = {
 };
 
 export default function CalendarCell({ day: { date, event } }) {
-  const theme = useTheme();
   const {
     cellHeight: height,
     event: eventProps,
@@ -42,11 +41,11 @@ export default function CalendarCell({ day: { date, event } }) {
   return (
     <Stack
       direction="column"
-      sx={{
+      sx={(theme) => ({
         gridColumnStart: gridColumnStart(),
         height,
         ...commonDayStyle(date,dayProps.highlighted(date),theme)
-      }}
+  })}
     >
       {dayProps.highlighted(date) ? (
         <Tooltip title={dayProps.highlightInfo(date)} placement="top" arrow>
