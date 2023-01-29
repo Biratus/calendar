@@ -6,7 +6,7 @@ import {
   isSameDay,
   isWithinInterval
 } from "date-fns";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   mergeModule,
@@ -34,15 +34,15 @@ export default function CalendarFiliere({
   // DropTarget: interval de drop
   const [dropTarget, setDropTarget] = useState(null);
 
-  const isDropTarget = (day) => {
+  const isDropTarget = useCallback((day) => {
     return dropTarget && isWithinInterval(day, dropTarget);
-  };
+  },[dropTarget]);
 
   const cleanDropTarget = () => {
     setDropTarget(null);
   };
 
-  const changeDropTarget = (dayAndEvent, evt) => {
+  const changeDropTarget = useCallback((dayAndEvent, evt) => {
     let targetDay;
     if (!dayAndEvent.event || dayAndEvent.event.duration == 1) {
       // Simple day or single day event
@@ -62,9 +62,9 @@ export default function CalendarFiliere({
         end: addDays(targetDay, draggedModule().duration - 1),
       });
     }
-  };
+  },[dropTarget]);
 
-  const dropModule = () => {
+  const dropModule = useCallback(() => {
     const newModules = modules.filter((m) => m.id != draggedModule().id);
     let newModule = draggedModule();
     newModule.start = formatISO(dropTarget.start);
@@ -72,7 +72,7 @@ export default function CalendarFiliere({
     newModules.push(newModule);
     setModules(newModules);
     cleanDropTarget();
-  };
+  },[modules,dropTarget]);
 
   return (
     <FullCalendar
@@ -145,23 +145,14 @@ function checkOverlapModules(data) {
       for (let eventIndex in newEvents) {
         let event = newEvents[eventIndex];
         if (moduleOverlap(mod, event)) {
-          if (overlap) {
-            overlap = mergeModule(overlap, event);
-          } else {
-            overlap = mergeModule(event, mod);
-          }
+            overlap = overlap?mergeModule(overlap, event):mergeModule(event, mod);
           newEvents.splice(eventIndex, 1);
         }
       }
       if (!overlap) newEvents.push(mod);
       else {
         overlap.duration = eachDayOfInterval(overlap).length;
-        overlap.label =
-          overlap.duration > 1 ? (
-            <>
-              <WarningAmberIcon color="error" sx={{verticalAlign:'middle'}} /> Modules superposés
-            </>
-          ) : (
+        overlap.label = (
             <WarningAmberIcon color="error" sx={{verticalAlign:'middle'}} />
           );
         newEvents.push(overlap);

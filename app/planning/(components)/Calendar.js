@@ -10,6 +10,7 @@ import ZoomUI from "../../../components/zoom/ZoomUI";
 import { toCalendarData } from "../../../lib/calendar";
 import { isFormateurMissing } from "../../../lib/realData";
 import CalendarFiliere from "./CalendarFiliere";
+import CalendarFormateur from "./CalendarFormateur";
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView, FormateurView } from "./CalendarViews";
 import { useLegend } from "./LegendProvider";
@@ -78,25 +79,6 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
       <ZoomUI range={5} />
       {(!view || view === FiliereView.key) && calendarFiliere}
       {view && view === FormateurView.key && calendarFormateur}
-    </>
-  );
-}
-
-function CalendarFormateur({ modules, ...props }) {
-  const calendarData = toCalendarData(
-    modules.filter((m) => !isFormateurMissing(m)),
-    "formateur.mail",
-    FormateurView,
-    true
-  );
-  return (
-    <>
-      <FullCalendar
-        data={calendarData}
-        EventTooltip={FormateurView.EventTooltip}
-        LabelComponent={FormateurView.LabelComponent}
-        {...props}
-      />
     </>
   );
 }

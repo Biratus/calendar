@@ -24,7 +24,7 @@ const hoverElementsInit = {
   splitModal: false,
   module: null,
   overlapDisplay: false,
-  menuOpen:false
+  menuOpen: false,
 };
 
 // Stuff to handle pop over components (menu, modals)
@@ -36,10 +36,10 @@ export default function CalendarProvider({ joursFeries, children }) {
   );
 
   // Drag
-  const draggedModule= useRef(null);
+  const draggedModule = useRef(null);
 
   // Menu Stuffs
-  const menuItems = [
+  const menuItems = useMemo(() => [
     {
       icon: <SwapHorizIcon />,
       text: "Modifier le formateur",
@@ -50,32 +50,35 @@ export default function CalendarProvider({ joursFeries, children }) {
       text: "Scinder le module",
       onClick: () => hoverDispatch({ type: "SPLIT_MODULE" }),
     },
-  ];
+  ]);
 
   /* 
   --------------------------
    HOVER DISPATCH 
   -------------------------- */
-  const openMenu = (event, ref) =>
-    hoverDispatch({
-      type: "OPEN_MENU",
-      value: { anchor: ref, module: event },
-    });
+  const openMenu = useCallback(
+    (event, ref) =>
+      hoverDispatch({
+        type: "OPEN_MENU",
+        value: { anchor: ref, module: event },
+      }),
+    []
+  );
 
-  const closeModals = () => {
+  const closeModals = useCallback(() => {
     hoverDispatch({ type: "CLOSE_MODAL" });
-  };
+  }, []);
 
-  const showOverlapModules = (event, ref) => {
+  const showOverlapModules = useCallback((event, ref) => {
     hoverDispatch({
       type: "OVERLAP_DISPLAY",
       value: { module: event, anchor: ref },
     });
-  };
+  }, []);
 
   const closeOverlapModuleOverlay = useCallback(() => {
     hoverDispatch({ type: "CLOSE_OVERLAP_DISPLAY" });
-  });
+  }, []);
 
   /* 
   --------------------------
@@ -108,17 +111,29 @@ export default function CalendarProvider({ joursFeries, children }) {
     [joursFeries]
   );
 
+  const draggedModuleGetter = useCallback(() => draggedModule.current,[]);
+  const draggedModuleSetter = useCallback((newValue) => draggedModule.current = newValue,[]);
+
   return (
     <CalendarContext.Provider
-      value={{ openMenu, showOverlapModules, isJoursFeries, getJourFeries,draggedModule:() => draggedModule.current,setDraggedModule:(elt) => draggedModule.current=elt }}
+      value={{
+        openMenu,
+        showOverlapModules,
+        isJoursFeries,
+        getJourFeries,
+        draggedModule: draggedModuleGetter,
+        setDraggedModule: draggedModuleSetter,
+      }}
     >
       {children}
-      {hoverProps.menuOpen && <PopUpMenu
-        anchorEl={hoverProps.anchorEl}
-        onClose={() => hoverDispatch({ type: "CLOSE_MENU" })}
-        header={hoverProps.module?.label}
-        items={menuItems}
-      />}
+      {hoverProps.menuOpen && (
+        <PopUpMenu
+          anchorEl={hoverProps.anchorEl}
+          onClose={() => hoverDispatch({ type: "CLOSE_MENU" })}
+          header={hoverProps.module?.label}
+          items={menuItems}
+        />
+      )}
       {hoverProps.module && hoverProps.switchModal && (
         <SwitchFormateurModal
           module={hoverProps.module}
@@ -141,8 +156,7 @@ export default function CalendarProvider({ joursFeries, children }) {
           onClose={closeOverlapModuleOverlay}
           data={hoverProps.module}
           selectModule={(mod) => {
-            draggedModule.current=mod;
-            // closeOverlapModuleOverlay();
+            draggedModule.current = mod;
           }}
         />
       )}
@@ -181,7 +195,7 @@ const hoverReducer = (state, action) => {
     case "CLOSE_OVERLAP_DISPLAY":
       state.overlapDisplay = false;
       state.module = null;
-      state.anchorEl = null;      
+      state.anchorEl = null;
       break;
   }
   return { ...state };
