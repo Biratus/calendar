@@ -21,9 +21,7 @@ export default function CalendarSimple({
   zoom,
   eventProps,
   dayProps,
-  sx,
-  commonDayStyle
-}) {
+  sx}) {
   const months = useMemo(
     () => makeMonths(start, monthLength),
     [start, monthLength]
@@ -54,7 +52,6 @@ export default function CalendarSimple({
           cellHeight: `${minCellHeight + zoom * 0.5}em`,
           event: eventProps,
           day: dayProps,
-          commonDayStyle
         }}
       >
         <HoverProvider>

@@ -11,9 +11,7 @@ import { useMonthNavigation } from "../../(components)/MonthNavigationProvider";
 import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarSimple from "../../../../components/newCalendar/SimpleView/CalendarSimple";
 import { calendarDayStyle } from "../../../../components/newCalendar/styles";
-import {
-  useZoom
-} from "../../../../components/zoom/ZoomProvider";
+import { useZoom } from "../../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../../components/zoom/ZoomUI";
 import { mapISO } from "../../../../lib/date";
 
@@ -23,7 +21,7 @@ export default function CalendarFormateur({
   formateur: { nom, prenom, mail },
   data,
 }) {
-  const formateurData = useMemo(() => mapISO(data, ["start", "end"]),[data]);
+  const formateurData = useMemo(() => mapISO(data, ["start", "end"]), [data]);
   const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
@@ -45,23 +43,31 @@ export default function CalendarFormateur({
       </Stack>
       <MonthNavigation />
       <CalendarSimple
-          time={{ start: month, monthLength: 3 }}
-          events={formateurData}
-          zoom={zoom}
-          eventProps={{
-            EventTooltip: FormateurView.EventTooltip,
-            color: (evt) => colorOf(evt.theme),
-            onClick: openMenu,
-          }}
-          dayProps={{
-            highlighted: isJoursFeries,
-            highlightInfo: getJourFeries,
-          }}
-          commonDayStyle={calendarDayStyle}
-          sx={{
-            width: viewWidth + zoom * 0.1,
-          }}
-        />
+        time={{ start: month, monthLength: 3 }}
+        events={formateurData}
+        zoom={zoom}
+        eventProps={{
+          EventTooltip: FormateurView.EventTooltip,
+          color: (evt) => colorOf(evt.theme),
+          onClick: openMenu,
+        }}
+        dayProps={{
+          tooltip: {
+            hasTooltip: isJoursFeries,
+            tooltipInfo: getJourFeries,
+          },
+          styleProps: (date, theme) => {
+            let style = {
+              ...calendarDayStyle(date, theme),
+            };
+            if (isJoursFeries(date)) style.color = "red";
+            return style;
+          },
+        }}
+        sx={{
+          width: viewWidth + zoom * 0.1,
+        }}
+      />
     </Stack>
   );
 }
