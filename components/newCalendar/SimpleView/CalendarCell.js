@@ -66,7 +66,7 @@ export default function CalendarCell({ day: { date, event } }) {
               )} !important`,
               opacity: hover == event ? 0.6 : 1,
               ...(highlighted &&
-                eventProps.highlightedProp(eventProps.color(event))),
+                eventProps.highlightedProps(eventProps.color(event))),
             }}
             onMouseEnter={() => setHover(event)}
             onMouseLeave={() => setHover(null)}

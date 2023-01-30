@@ -6,7 +6,7 @@ import { moduleDayLabel } from "../../../lib/calendar";
 export default function CalendarRow({ event,AdditionalInfo, context }) {
   const { start, end, name } = event;
 
-  const { color, eventHighlighted, highlightedProp,onClick } = useContext(context);
+  const { color, eventHighlighted, highlightedProps,onClick } = useContext(context);
 
   const highlighted = event && eventHighlighted(event);
 
@@ -27,7 +27,7 @@ export default function CalendarRow({ event,AdditionalInfo, context }) {
     overflow: "hidden",
     whiteSpace: "nowrap",
     textOverflow: "ellipsis",
-    ...(highlighted && highlightedProp(color(event))),
+    ...(highlighted && highlightedProps(color(event))),
     "&:hover": {
       opacity: 0.6,
     },

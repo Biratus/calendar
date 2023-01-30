@@ -47,7 +47,7 @@ export default function CalendarFiliere({ name, modules }) {
           value={{
             color: ({ theme }) => colorOf(theme),
             eventHighlighted: isFormateurMissing,
-            highlightedProp: missingFormateurStyle,
+            highlightedProps: missingFormateurStyle,
             onClick: openMenu,
           }}
         >

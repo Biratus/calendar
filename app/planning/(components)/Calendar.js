@@ -33,7 +33,7 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
       color: (mod) => colorOf(mod.theme),
       onClick: openMenu,
       highlighted: (mod) => isFormateurMissing(mod) || mod.overlap,
-      highlightedProp: (mod) => {
+      highlightedProps: (mod) => {
         if (isFormateurMissing(mod))
           return missingFormateurStyle(colorOf(mod.theme));
         else if (mod.overlap)

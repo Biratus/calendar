@@ -18,7 +18,7 @@ const style = {
 const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
   const {
     commonDayStyle,
-    event: { highlighted: eventHighlighted, highlightedProp, onClick, color },
+    event: { highlighted: eventHighlighted, highlightedProps, onClick, color },
   } = useContext(FullCalendarContext);
 
   const highlighted = event && eventHighlighted(event);
@@ -32,7 +32,7 @@ const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
         background: `radial-gradient(circle, ${color(
           event
         )} 30%, rgba(148,187,233,0) 100%)`,
-        ...(highlighted && highlightedProp(event)),
+        ...(highlighted && highlightedProps(event)),
       })}
       onClick={(evt) => onClick(event, evt.currentTarget)}
       {...props}
