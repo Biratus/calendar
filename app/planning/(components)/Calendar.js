@@ -4,10 +4,12 @@ import FullCalendar from "../../../components/newCalendar/FullData/CalendarData"
 import {
   calendarDayStyle,
   missingFormateurStyle,
+  overlapModuleStyle,
 } from "../../../components/newCalendar/styles";
 import { useZoom } from "../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../components/zoom/ZoomUI";
 import { toCalendarData } from "../../../lib/calendar";
+import { overlapModuleLegend } from "../../../lib/colors";
 import { isFormateurMissing } from "../../../lib/realData";
 import CalendarFiliere from "./CalendarFiliere";
 import CalendarFormateur from "./CalendarFormateur";
@@ -17,8 +19,7 @@ import { useLegend } from "./LegendProvider";
 import { useMonthNavigation } from "./MonthNavigationProvider";
 
 export default function CommonCalendar({ modules, view, monthLength = 3 }) {
-  const { openMenu, isJoursFeries, getJourFeries } =
-    useCalendar();
+  const { openMenu, isJoursFeries, getJourFeries } = useCalendar();
   const [month] = useMonthNavigation();
   const { colorOf, showLegend } = useLegend();
   const { zoom } = useZoom();
@@ -34,14 +35,9 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
       onClick: openMenu,
       highlighted: (mod) => isFormateurMissing(mod) || mod.overlap,
       highlightedProps: (mod) => {
-        if (isFormateurMissing(mod))
+        if (mod.overlap) return overlapModuleStyle;
+        else if (isFormateurMissing(mod))
           return missingFormateurStyle(colorOf(mod.theme));
-        else if (mod.overlap)
-          return {
-            boxShadow: `0px 0px 0.7em 0.1em #D6C588 inset`,
-            background: "black",
-            color: "white",
-          };
       },
     },
     day: {
@@ -55,17 +51,13 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
         };
         if (isJoursFeries(date)) style.color = "red";
         return style;
-      }
+      },
     },
     commonDayStyle: calendarDayStyle,
   };
 
   const calendarFiliere = useMemo(
-    () => (
-      <CalendarFiliere
-        {...commonProps}
-      />
-    ),
+    () => <CalendarFiliere {...commonProps} />,
     [modules, month, zoom]
   );
 

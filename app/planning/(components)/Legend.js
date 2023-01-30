@@ -10,7 +10,9 @@ export default function Legend({ legendList }) {
         m: 5,
       }}
     >
-      <Typography variant="h5" sx={{m:1}}>Légende des modules</Typography>
+      <Typography variant="h5" sx={{ m: 1 }}>
+        Légende des modules
+      </Typography>
       <Box
         sx={{
           display: "grid",
@@ -19,22 +21,30 @@ export default function Legend({ legendList }) {
         }}
       >
         {legendList.map(({ label, color }) => (
-          <LegendItem key={label} backgroundColor={color} label={label} />
+          <LegendItem
+            key={label}
+            styleProps={
+              typeof color === "string"
+                ? { backgroundColor: color }
+                : { ...color }
+            }
+            label={label}
+          />
         ))}
       </Box>
     </Box>
   );
 }
 
-function LegendItem({ backgroundColor, label }) {
+function LegendItem({ styleProps, label }) {
   return (
     <Stack direction="row" spacing={2} alignItems="center">
       <Box
         sx={{
           width: "15px",
           height: "15px",
-          backgroundColor,
           borderRadius: "20%",
+          ...styleProps,
         }}
       ></Box>
       <span>{label}</span>

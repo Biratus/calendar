@@ -1,25 +1,38 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import {
-  getColorsForLabels,
-  missingFormateurLegend,
-} from "../../../lib/colors";
+  missingFormateurStyle,
+  overlapModuleStyle
+} from "../../../components/newCalendar/styles";
+import { getColorsForLabels } from "../../../lib/colors";
 import Legend from "./Legend";
+
+const missingFormateurLegend = {
+  label: "Formateur non défini",
+  color: missingFormateurStyle("grey"),
+};
+
+const overlapModuleLegend = {
+  label: "Modules superposés",
+  color: overlapModuleStyle,
+};
 
 const LegendContext = createContext();
 
 export default function LegendProvider({ themes, children }) {
-  const colors = getColorsForLabels(themes);  
-  
-  const colorOf = (label,raw=false) => {
-    if(!colors[label]) throw new Error('No matching color for ',label);
-    if(raw) return colors[label];
+  const colors = getColorsForLabels(themes);
+
+  const colorOf = useCallback((label, raw = false) => {
+    if (!colors[label]) throw new Error("No matching color for ", label);
+    if (raw) return colors[label];
     return colors[label].rgb;
-  }
-  const fullLegend = [
+  });
+  
+  const fullLegend = useMemo(() => [
     missingFormateurLegend,
+    overlapModuleLegend,
     ...themes.map((t) => ({ label: t, color: colorOf(t) })),
-  ];
+  ]);
 
   const [legendList, setLegendList] = useState(fullLegend);
 
@@ -36,8 +49,6 @@ export default function LegendProvider({ themes, children }) {
       ]);
     }
   };
-
-
 
   return (
     <LegendContext.Provider value={{ showLegend, colorOf }}>
