@@ -171,10 +171,12 @@ const hoverReducer = (state, action) => {
       state.module = action.value.module;
       break;
     case "SPLIT_MODULE":
+      state.menuOpen = false;
       state.anchorEl = null;
       state.splitModal = true;
       break;
     case "SWITCH_FORM":
+      state.menuOpen = false;
       state.anchorEl = false;
       state.switchModal = true;
       break;

@@ -30,6 +30,7 @@ export default function CalendarFormateur({
     return data;
   }, [modules]);
 
+
   const { showOverlapModules, draggedModule, setDraggedModule } = useCalendar();
   // DropTarget: interval de drop
   const [dropTarget, setDropTarget] = useState({
@@ -93,7 +94,7 @@ export default function CalendarFormateur({
     cleanDropTarget();
   }, [modules, dropTarget]);
 
-  return (<>{JSON.stringify(dropTarget.formateur)}
+  return (
     <FullCalendar
       {...props}
       data={calendarData}
@@ -133,7 +134,7 @@ export default function CalendarFormateur({
           changeDropTarget(dayAndEvent,formateur, evt);
         },
       }}
-    /></>
+    />
   );
 }
 function getTargetDay(targetModule, { targetWidth, mouseOffsetX }) {
