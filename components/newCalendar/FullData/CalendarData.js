@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Tooltip, useTheme } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import {
   areIntervalsOverlapping,
   eachDayOfInterval,
@@ -30,9 +30,12 @@ export default function FullCalendar({
   day,
   commonDayStyle,
   zoom,
+  drag,
 }) {
-  const theme = useTheme();
-  const { highlighted, highlightedProp, highlightInfo } = day;
+  const {
+    tooltip: { hasTooltip, tooltipInfo },
+    styleProps,
+  } = day;
 
   const month = start;
   const months = useMemo(
@@ -40,6 +43,7 @@ export default function FullCalendar({
     [month, monthLength]
   );
 
+  // Only display data that is within the month interval
   const data = originalData.filter((d) =>
     dataOverlapInterval(d.events, {
       start: startOfMonth(months[0].day),
@@ -55,12 +59,12 @@ export default function FullCalendar({
 
   const daysRow = useMemo(() => {
     return days.map((day, i) =>
-      highlighted(day) ? (
+      hasTooltip(day) ? (
         <SpecialDay
           key={i}
           day={day}
-          specialLabel={highlightInfo(day)}
-          specialStyle={{ ...commonDayStyle(day, true, theme) }}
+          specialLabel={tooltipInfo(day)}
+          specialStyle={(theme) => styleProps(day, theme)}
           first={i == 0}
         />
       ) : (
@@ -68,11 +72,11 @@ export default function FullCalendar({
           key={i}
           first={i == 0}
           day={day}
-          sx={{ ...commonDayStyle(day, false, theme) }}
+          sx={(theme) => styleProps(day, theme)}
         />
       )
     );
-  }, [days, highlighted, highlightedProp, highlightInfo, theme.palette.mode]);
+  }, [days, hasTooltip, tooltipInfo, styleProps]);
 
   const monthRow = useMemo(() => {
     return months.map((m, i) => <Month month={m} key={i} first={i == 0} />);
@@ -84,6 +88,7 @@ export default function FullCalendar({
         days,
         event,
         commonDayStyle,
+        drag,
       }}
     >
       <Box
@@ -92,9 +97,7 @@ export default function FullCalendar({
             minCellSize + zoom * 5
           }px)`,
           gridTemplateRows: `1fr 1fr ${
-            data.length
-              ? `repeat(${data.length},${minCellSize + zoom * 5}px)`
-              : ""
+            data.length ? `repeat(${data.length},${cellHeight(zoom)}px)` : ""
           }`,
           display: "grid",
           pb: "1em",
@@ -142,11 +145,11 @@ function Month({ month: { nbOfDays, day }, first }) {
 
 const Day = React.forwardRef(({ day, first, sx = {}, ...props }, ref) => (
   <Box
-    sx={{
+    sx={(theme) => ({
       textAlign: "center",
       gridColumnStart: first ? 2 : "auto",
-      ...sx,
-    }}
+      ...sx(theme),
+    })}
     ref={ref}
     {...props}
   >
@@ -159,7 +162,7 @@ Day.displayName = "Day";
 function SpecialDay({ day, specialLabel, specialStyle, first }) {
   return (
     <Tooltip title={specialLabel} placement="top" arrow>
-      <Day first={first} day={day} sx={{ ...specialStyle }} />
+      <Day first={first} day={day} sx={specialStyle} />
     </Tooltip>
   );
 }
@@ -169,3 +172,7 @@ const dataOverlapInterval = (data, interval) => {
     areIntervalsOverlapping({ start, end }, interval, { inclusive: true })
   );
 };
+
+export function cellHeight(coef) {
+  return minCellSize + coef * 5;
+}

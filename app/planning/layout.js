@@ -10,9 +10,11 @@ export default async function Layout({ children }) {
   const joursFeries = await getAllJoursFeries(monthStart);
 
   return (
-    <CalendarProvider joursFeries={joursFeries}>
-      {/* PopupMenu, Modals, joursFeries*/}
-      <LegendProvider themes={themes}>{children}</LegendProvider>
-    </CalendarProvider>
+    <LegendProvider themes={themes}>
+      <CalendarProvider joursFeries={joursFeries}>
+        {/* PopupMenu, Modals, joursFeries*/}
+        {children}
+      </CalendarProvider>
+    </LegendProvider>
   );
 }

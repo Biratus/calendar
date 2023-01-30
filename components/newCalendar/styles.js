@@ -7,7 +7,7 @@ export const monthLabel = {
 }
 
 export const day = {
-    borderLeft:'1px solid gray',
+    borderLeft:'1px solid gray'
 }
 
 export const weekend = {
@@ -47,12 +47,10 @@ export const missingFormateurStyle = (eventColor) => ({
 });
 
 
-export const calendarDayStyle = (day,highlighted,theme) => {
+export const calendarDayStyle = (date,theme) => {
   let style = {...day};
 
-  if(isWeekend(day)) style = {...style,...weekend[theme.palette.mode]};
-
-  if(highlighted) style = {...style,color:'red'};
+  if(isWeekend(date)) style = {...style,...weekend[theme.palette.mode]};
 
   return style
 }

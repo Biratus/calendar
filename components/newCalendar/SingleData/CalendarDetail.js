@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { isSameMonth } from "date-fns";
-import { forwardRef, useContext, useMemo } from "react";
+import { forwardRef, useMemo } from "react";
 import { formatMonthYear, nbOfDaysBetween } from "../../../lib/date";
 import CalendarRow from "./CalendarRow";
 
@@ -100,6 +100,8 @@ const CalendarDetail = forwardRef(
   }
 );
 
+CalendarDetail.displayName = "CalendarDetail";
+
 export default CalendarDetail;
 
 function Month({ name, span }) {
@@ -117,7 +119,9 @@ function Month({ name, span }) {
           "linear-gradient(-120deg, hsl(47, 49%, 61%) 0%, hsl(47, 49%, 61%) 19%, rgba(0,0,0,0) 50%)",
       }}
     >
-      <div style={{transform: "rotate(-180deg)",textAlign:'right'}}>{name}</div>
+      <div style={{ transform: "rotate(-180deg)", textAlign: "right" }}>
+        {name}
+      </div>
     </Box>
   );
 }

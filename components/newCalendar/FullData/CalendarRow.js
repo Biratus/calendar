@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Tooltip, useTheme } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { eachDayOfInterval, isWithinInterval } from "date-fns";
 import { useContext } from "react";
 import { FullCalendarContext } from "./CalendarData";
@@ -11,31 +11,43 @@ export default function CalendarRow({
   labelProps: { key: labelKey, title: labelTitle, LabelComponent },
   EventTooltip,
 }) {
-  const theme = useTheme();
-  const { days,commonDayStyle } = useContext(FullCalendarContext);
+  const {
+    days,
+    commonDayStyle,
+    drag: { enter, leave, move, drop, drag },
+  } = useContext(FullCalendarContext);
   const daysAndEvents = mergeDaysAndEvent(days, events, days[days.length - 1]);
+
   return (
     <>
       <Tooltip title={labelTitle} arrow placement="right">
         <LabelComponent labelKey={labelKey} />
       </Tooltip>
       {daysAndEvents.map((day, id) => {
+        const dragEvents = {
+          onDrag: (evt) => drag(day, labelKey, evt),
+          onDragOver: (evt) => move(day, labelKey, evt),
+          onDragEnter: (evt) => enter(day, labelKey, evt),
+          onDragLeave: (evt) => leave(day, labelKey, evt),
+          onDrop: (evt) => drop(day, labelKey, evt),
+        };
         return day.event ? (
           EventTooltip ? (
             <EventTooltip key={id} event={day.event}>
-              <CalendarEvent key={id} day={day} />
+              <CalendarEvent key={id} day={day} {...dragEvents} draggable />
             </EventTooltip>
           ) : (
-            <CalendarEvent key={id} day={day} />
+            <CalendarEvent key={id} day={day} {...dragEvents} draggable />
           )
         ) : (
           <Box
             key={id}
-            sx={{
+            sx={(theme) => ({
               textAlign: "center",
               borderLeft: "1px solid gray",
-              ...commonDayStyle(day.date,false,theme)
-            }}
+              ...commonDayStyle(day.date, theme),
+            })}
+            {...dragEvents}
           ></Box>
         );
       })}
@@ -62,11 +74,15 @@ function mergeDaysAndEvent(days, events, limit) {
 
     let evt = eventOf(d);
     if (evt) {
-      evt.duration = eachDayOfInterval({
-        start: evt.start,
-        end: evt.end.getTime() > limit ? limit : evt.end,
-      }).length;
-      currSkip = evt.duration - 1;
+      // Make cell span for duration of event if within time interval
+      evt.span =
+        evt.end.getTime() > limit
+          ? eachDayOfInterval({
+              start: evt.start,
+              end: limit,
+            }).length
+          : evt.duration;
+      currSkip = evt.span - 1;
       newDays.push({ date: d, event: evt });
     } else newDays.push({ date: d });
   }
