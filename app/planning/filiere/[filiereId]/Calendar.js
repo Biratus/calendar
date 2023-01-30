@@ -13,7 +13,7 @@ import CalendarDetail from "../../../../components/newCalendar/SingleData/Calend
 import { missingFormateurStyle } from "../../../../components/newCalendar/styles";
 import { useZoom } from "../../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../../components/zoom/ZoomUI";
-import { mapISO } from "../../../../lib/calendar";
+import { mapISO } from "../../../../lib/date";
 import { isFormateurMissing } from "../../../../lib/realData";
 
 const viewWidth = 0.5;

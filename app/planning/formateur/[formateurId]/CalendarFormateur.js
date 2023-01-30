@@ -15,7 +15,7 @@ import {
   useZoom
 } from "../../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../../components/zoom/ZoomUI";
-import { mapISO } from "../../../../lib/calendar";
+import { mapISO } from "../../../../lib/date";
 
 const viewWidth = 0.5;
 
