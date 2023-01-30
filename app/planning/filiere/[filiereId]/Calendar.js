@@ -48,7 +48,7 @@ export default function CalendarFiliere({ name, modules }) {
             eventHighlighted: isFormateurMissing,
             highlightedProps: missingFormateurStyle,
             onClick: openMenu,
-            label: (mod) => mod.name
+            label: (mod) => mod.name,
           }}
         >
           <CalendarDetail

@@ -18,15 +18,13 @@ import { toGetParams } from "../../lib/navigation";
 
 var formateurs = formateurForFields();
 
-export default function FormateurForm({ formateur:{current:formateur} }) {
+export default function FormateurForm({ formateur: { current: formateur } }) {
   const [formateurLoading, setFormateurLoading] = useState(false);
 
   const availableRef = useRef();
   const ableRef = useRef();
 
-  var formateurValue = formateurs.filter(
-    (f) => f.id == formateur.mail
-  )[0];
+  var formateurValue = formateurs.filter((f) => f.id == formateur.mail)[0];
 
   const updateFormateurList = async () => {
     setFormateurLoading(true);

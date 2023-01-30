@@ -1,14 +1,7 @@
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
-import {
-  addDays, formatISO,
-  isSameDay,
-  isWithinInterval
-} from "date-fns";
+import { addDays, formatISO, isSameDay, isWithinInterval } from "date-fns";
 import { useCallback, useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
-import {
-  checkOverlapModules, toCalendarData
-} from "../../../lib/calendar";
+import { checkOverlapModules, toCalendarData } from "../../../lib/calendar";
 import { getTargetDay } from "../../../lib/mouseEvent";
 import { useCalendar } from "./CalendarProvider";
 import { FiliereView } from "./CalendarViews";
@@ -23,19 +16,6 @@ export default function CalendarFiliere({
   const calendarData = useMemo(() => {
     const data = toCalendarData(modules, "filiere", FiliereView, true);
     checkOverlapModules(data);
-    // data.forEach((row) =>
-    //   row.events
-    //     .filter((event) => event.overlap)
-    //     .forEach(
-    //       (event) =>
-    //         (event.label = (
-    //           <WarningAmberIcon
-    //             color="error"
-    //             sx={{ verticalAlign: "middle" }}
-    //           />
-    //         ))
-    //     )
-    // );
     return data;
   }, [modules]);
   const { showOverlapModules, draggedModule, setDraggedModule } = useCalendar();

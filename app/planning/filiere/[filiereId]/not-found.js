@@ -1,3 +1,3 @@
 export default function NotFound() {
-    return "Cette filiere n'existe pas";
+  return "Cette filiere n'existe pas";
 }

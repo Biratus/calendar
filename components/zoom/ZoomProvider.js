@@ -10,10 +10,10 @@ export default function ZoomProvider({
   defaultCoef = 1,
   children,
 }) {
-  const [zoom, setZoom,loaded] = useLocalStorage(storageKey, defaultCoef);
+  const [zoom, setZoom, loaded] = useLocalStorage(storageKey, defaultCoef);
   return (
     <ZoomContext.Provider value={{ zoom, setZoom }}>
-      {loaded?children:<LoadingBar/>}
+      {loaded ? children : <LoadingBar />}
     </ZoomContext.Provider>
   );
 }

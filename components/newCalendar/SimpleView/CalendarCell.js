@@ -20,7 +20,7 @@ export default function CalendarCell({ day: { date, event } }) {
   const {
     cellHeight: height,
     event: eventProps,
-    day: {tooltip:dayTooltip,styleProps:dayStyleProps},
+    day: { tooltip: dayTooltip, styleProps: dayStyleProps },
   } = useContext(SimpleCalendarContext);
 
   const EventTooltip = eventProps.EventTooltip;
@@ -35,7 +35,7 @@ export default function CalendarCell({ day: { date, event } }) {
   const highlighted =
     event && eventProps.highlighted && eventProps.highlighted(event);
 
-  const Day = <Box sx={{ p: "0.5em"}}>{formatDayDate(date)}</Box>;
+  const Day = <Box sx={{ p: "0.5em" }}>{formatDayDate(date)}</Box>;
 
   return (
     <Stack
@@ -43,8 +43,8 @@ export default function CalendarCell({ day: { date, event } }) {
       sx={(theme) => ({
         gridColumnStart: gridColumnStart(),
         height,
-        ...dayStyleProps(date,theme),
-  })}
+        ...dayStyleProps(date, theme),
+      })}
     >
       {dayTooltip.hasTooltip(date) ? (
         <Tooltip title={dayTooltip.tooltipInfo(date)} placement="top" arrow>

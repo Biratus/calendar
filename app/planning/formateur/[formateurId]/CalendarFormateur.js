@@ -8,7 +8,6 @@ import GlobalViewLink from "../../(components)/GlobalViewLink";
 import { useLegend } from "../../(components)/LegendProvider";
 import MonthNavigation from "../../(components)/MonthNavigation";
 import { useMonthNavigation } from "../../(components)/MonthNavigationProvider";
-import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarSimple from "../../../../components/newCalendar/SimpleView/CalendarSimple";
 import { calendarDayStyle } from "../../../../components/newCalendar/styles";
 import { useZoom } from "../../../../components/zoom/ZoomProvider";
@@ -47,7 +46,7 @@ export default function CalendarFormateur({
         events={formateurData}
         zoom={zoom}
         eventProps={{
-          label:(mod) => mod.name,
+          label: (mod) => mod.name,
           EventTooltip: FormateurView.EventTooltip,
           color: (evt) => colorOf(evt.theme),
           onClick: openMenu,

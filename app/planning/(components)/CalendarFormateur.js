@@ -1,10 +1,7 @@
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import { addDays, formatISO, isSameDay, isWithinInterval } from "date-fns";
 import { useCallback, useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
-import {
-  checkOverlapModules, toCalendarData
-} from "../../../lib/calendar";
+import { checkOverlapModules, toCalendarData } from "../../../lib/calendar";
 import { getTargetDay } from "../../../lib/mouseEvent";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
@@ -26,22 +23,8 @@ export default function CalendarFormateur({
       true
     );
     checkOverlapModules(data);
-    // data.forEach((row) =>
-    //   row.events
-    //     .filter((event) => event.overlap)
-    //     .forEach(
-    //       (event) =>
-    //         (event.label = (
-    //           <WarningAmberIcon
-    //             color="error"
-    //             sx={{ verticalAlign: "middle" }}
-    //           />
-    //         ))
-    //     )
-    // );
     return data;
   }, [modules]);
-
 
   const { showOverlapModules, draggedModule, setDraggedModule } = useCalendar();
   // DropTarget: interval de drop
@@ -65,7 +48,7 @@ export default function CalendarFormateur({
   };
 
   const changeDropTarget = useCallback(
-    (dayAndEvent,formateur, evt) => {
+    (dayAndEvent, formateur, evt) => {
       let targetDay;
       if (!dayAndEvent.event || dayAndEvent.event.duration == 1) {
         // Simple day or single day event
@@ -134,16 +117,15 @@ export default function CalendarFormateur({
           else evt.preventDefault();
         },
         enter: (dayAndEvent, formateur, evt) => {
-          changeDropTarget(dayAndEvent,formateur, evt);
+          changeDropTarget(dayAndEvent, formateur, evt);
         },
-        leave: (dayAndEvent, formateur, evt) => {
-        },
+        leave: (dayAndEvent, formateur, evt) => {},
         drop: (dayAndEvent, formateur, evt) => {
           dropModule();
         },
         move: (dayAndEvent, formateur, evt) => {
           evt.preventDefault();
-          changeDropTarget(dayAndEvent,formateur, evt);
+          changeDropTarget(dayAndEvent, formateur, evt);
         },
       }}
     />

@@ -111,8 +111,11 @@ export default function CalendarProvider({ joursFeries, children }) {
     [joursFeries]
   );
 
-  const draggedModuleGetter = useCallback(() => draggedModule.current,[]);
-  const draggedModuleSetter = useCallback((newValue) => draggedModule.current = newValue,[]);
+  const draggedModuleGetter = useCallback(() => draggedModule.current, []);
+  const draggedModuleSetter = useCallback(
+    (newValue) => (draggedModule.current = newValue),
+    []
+  );
 
   return (
     <CalendarContext.Provider

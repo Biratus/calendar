@@ -1,3 +1,3 @@
 export default function NotFound() {
-    return "Ce formateur n'existe pas";
+  return "Ce formateur n'existe pas";
 }

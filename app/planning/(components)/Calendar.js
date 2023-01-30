@@ -2,7 +2,6 @@
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 import { useEffect, useMemo } from "react";
-import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
   calendarDayStyle,
   missingFormateurStyle,
@@ -10,8 +9,6 @@ import {
 } from "../../../components/newCalendar/styles";
 import { useZoom } from "../../../components/zoom/ZoomProvider";
 import ZoomUI from "../../../components/zoom/ZoomUI";
-import { toCalendarData } from "../../../lib/calendar";
-import { overlapModuleLegend } from "../../../lib/colors";
 import { isFormateurMissing } from "../../../lib/realData";
 import CalendarFiliere from "./CalendarFiliere";
 import CalendarFormateur from "./CalendarFormateur";
@@ -33,14 +30,12 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
     zoom,
     time: { start: month, monthLength },
     event: {
-      label:(mod) => {
-        if(mod.overlap) return (
-          <WarningAmberIcon
-            color="error"
-            sx={{ verticalAlign: "middle" }}
-          />
-        );
-         else return mod.duration == 1?"":mod.name;
+      label: (mod) => {
+        if (mod.overlap)
+          return (
+            <WarningAmberIcon color="error" sx={{ verticalAlign: "middle" }} />
+          );
+        else return mod.duration == 1 ? "" : mod.name;
       },
       color: (mod) => colorOf(mod.theme),
       onClick: openMenu,

@@ -54,8 +54,7 @@ export default function OverlapModuleOverlay({
         }}
       >
         {data.overlappedModules.map((mod, i) => (
-          <FormateurTooltip event={mod}
-          key={i}>
+          <FormateurTooltip event={mod} key={i}>
             <Box
               draggable
               onDragStart={(evt) => dragStart(mod, evt)}

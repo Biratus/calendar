@@ -3,7 +3,8 @@ import { Box } from "@mui/material";
 import {
   eachDayOfInterval,
   endOfMonth,
-  isWithinInterval, startOfMonth
+  isWithinInterval,
+  startOfMonth,
 } from "date-fns";
 import { createContext, useMemo } from "react";
 import { makeMonths } from "../../../lib/calendar";
@@ -21,7 +22,8 @@ export default function CalendarSimple({
   zoom,
   eventProps,
   dayProps,
-  sx}) {
+  sx,
+}) {
   const months = useMemo(
     () => makeMonths(start, monthLength),
     [start, monthLength]

@@ -9,12 +9,12 @@ const views = {};
 views[FiliereView.key] = FiliereView;
 views[FormateurView.key] = FormateurView;
 
-export default function ViewDropdown({ view: viewParam = FiliereView.key  }) {
+export default function ViewDropdown({ view: viewParam = FiliereView.key }) {
   const router = useRouter();
   const params = useSearchParams();
   const path = usePathname();
 
-  const view =views[viewParam]
+  const view = views[viewParam];
 
   const viewActions = Object.keys(views).map((k) => {
     return {

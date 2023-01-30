@@ -1,7 +1,5 @@
 "use client";
-import {
-  Stack
-} from "@mui/material";
+import { Stack } from "@mui/material";
 import SwitchThemeUI from "../components/theme/SwitchTheme";
 import ThemeProvider from "../components/theme/ThemeProvider";
 import "./globals.css";

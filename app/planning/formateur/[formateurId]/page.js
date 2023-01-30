@@ -13,8 +13,7 @@ export default function Formateur({
   params: { formateurId },
   searchParams: { date: monthParam },
 }) {
-
-  if(!formateurs.hasOwnProperty(decodeURIComponent(formateurId))) {
+  if (!formateurs.hasOwnProperty(decodeURIComponent(formateurId))) {
     notFound();
   }
 

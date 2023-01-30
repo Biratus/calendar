@@ -74,7 +74,6 @@ function FiliereTooltip({ event, children }) {
   );
 }
 export function FormateurTooltip({ event, children }) {
-
   return (
     <EventTooltip
       event={event}

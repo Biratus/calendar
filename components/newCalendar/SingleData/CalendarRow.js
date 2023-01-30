@@ -3,10 +3,11 @@ import { eachDayOfInterval } from "date-fns";
 import { useContext } from "react";
 import { moduleDayLabel } from "../../../lib/calendar";
 
-export default function CalendarRow({ event,AdditionalInfo, context }) {
+export default function CalendarRow({ event, AdditionalInfo, context }) {
   const { start, end } = event;
 
-  const { color, eventHighlighted, highlightedProps,onClick,label } = useContext(context);
+  const { color, eventHighlighted, highlightedProps, onClick, label } =
+    useContext(context);
 
   const highlighted = event && eventHighlighted(event);
 
@@ -42,7 +43,7 @@ export default function CalendarRow({ event,AdditionalInfo, context }) {
         {label(event)}
       </Box>
       <Box sx={{ ...commonStyle }}>
-        <AdditionalInfo event={event}/>
+        <AdditionalInfo event={event} />
       </Box>
     </>
   );

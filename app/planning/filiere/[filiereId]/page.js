@@ -9,7 +9,7 @@ export default function FilierePage({ params: { filiereId } }) {
     label: m.name,
   }));
 
-  if(filiereData.length==0) {
+  if (filiereData.length == 0) {
     notFound();
   }
 

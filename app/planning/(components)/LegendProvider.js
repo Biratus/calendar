@@ -1,8 +1,14 @@
 "use client";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import {
   missingFormateurStyle,
-  overlapModuleStyle
+  overlapModuleStyle,
 } from "../../../components/newCalendar/styles";
 import { getColorsForLabels } from "../../../lib/colors";
 import Legend from "./Legend";
@@ -27,7 +33,7 @@ export default function LegendProvider({ themes, children }) {
     if (raw) return colors[label];
     return colors[label].rgb;
   });
-  
+
   const fullLegend = useMemo(() => [
     missingFormateurLegend,
     overlapModuleLegend,

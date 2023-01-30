@@ -5,7 +5,7 @@ import { formatMonthYear } from "../lib/date";
 import { objectToCSS } from "../lib/pdf";
 import { isFormateurMissing } from "../lib/realData";
 
-export default function htmlFromFiliere(filiereId,modules) {
+export default function htmlFromFiliere(filiereId, modules) {
   // Building table rows
   let currMonth = modules[0].start;
   let indexToAdd = 0;
@@ -53,7 +53,7 @@ export default function htmlFromFiliere(filiereId,modules) {
     td: {},
     ".month": {
       "font-weight": "bold",
-      "font-size":"1.2em",
+      "font-size": "1.2em",
       color: "#18263B",
       background:
         "linear-gradient(-120deg, hsl(47, 49%, 61%) 0%, hsl(47, 49%, 61%) 19%, rgb(255,255,255) 80%)",

@@ -1,7 +1,7 @@
 "use client";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useContext } from "react";
 import { ThemeContext } from "./ThemeProvider";
 

@@ -1,3 +1,7 @@
-export default function Head({params:{formateurId}}) {
-    return (<><title>{`Formateur - ${formateurId}`}</title></>)
+export default function Head({ params: { formateurId } }) {
+  return (
+    <>
+      <title>{`Formateur - ${formateurId}`}</title>
+    </>
+  );
 }
