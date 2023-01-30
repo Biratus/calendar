@@ -4,9 +4,9 @@ import { useContext } from "react";
 import { moduleDayLabel } from "../../../lib/calendar";
 
 export default function CalendarRow({ event,AdditionalInfo, context }) {
-  const { start, end, name } = event;
+  const { start, end } = event;
 
-  const { color, eventHighlighted, highlightedProps,onClick } = useContext(context);
+  const { color, eventHighlighted, highlightedProps,onClick,label } = useContext(context);
 
   const highlighted = event && eventHighlighted(event);
 
@@ -39,7 +39,7 @@ export default function CalendarRow({ event,AdditionalInfo, context }) {
         sx={{ ...eventStyle }}
         onClick={(evt) => onClick(event, evt.currentTarget)}
       >
-        {name}
+        {label(event)}
       </Box>
       <Box sx={{ ...commonStyle }}>
         <AdditionalInfo event={event}/>

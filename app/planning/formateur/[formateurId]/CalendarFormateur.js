@@ -47,6 +47,7 @@ export default function CalendarFormateur({
         events={formateurData}
         zoom={zoom}
         eventProps={{
+          label:(mod) => mod.name,
           EventTooltip: FormateurView.EventTooltip,
           color: (evt) => colorOf(evt.theme),
           onClick: openMenu,

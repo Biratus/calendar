@@ -72,7 +72,7 @@ export default function CalendarCell({ day: { date, event } }) {
             onClick={(evt) => eventProps.onClick(event, evt.currentTarget)}
           >
             <Typography noWrap>
-              {isSameDay(event.start, date) && event.label}
+              {isSameDay(event.start, date) && eventProps.label(event)}
             </Typography>
           </Box>
         </EventTooltip>

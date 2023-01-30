@@ -18,7 +18,7 @@ const style = {
 const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
   const {
     commonDayStyle,
-    event: { highlighted: eventHighlighted, highlightedProps, onClick, color },
+    event: { highlighted: eventHighlighted, highlightedProps, onClick, color,label },
   } = useContext(FullCalendarContext);
 
   const highlighted = event && eventHighlighted(event);
@@ -37,7 +37,7 @@ const CalendarEvent = forwardRef(({ day: { date, event }, ...props }, ref) => {
       onClick={(evt) => onClick(event, evt.currentTarget)}
       {...props}
     >
-      <Typography noWrap>{event.label}</Typography>
+      <Typography noWrap>{label(event)}</Typography>
     </Box>
   );
 });

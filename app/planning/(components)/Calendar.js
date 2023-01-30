@@ -1,4 +1,6 @@
 "use client";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+
 import { useEffect, useMemo } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
@@ -31,6 +33,15 @@ export default function CommonCalendar({ modules, view, monthLength = 3 }) {
     zoom,
     time: { start: month, monthLength },
     event: {
+      label:(mod) => {
+        if(mod.overlap) return (
+          <WarningAmberIcon
+            color="error"
+            sx={{ verticalAlign: "middle" }}
+          />
+        );
+         else return mod.duration == 1?"":mod.name;
+      },
       color: (mod) => colorOf(mod.theme),
       onClick: openMenu,
       highlighted: (mod) => isFormateurMissing(mod) || mod.overlap,

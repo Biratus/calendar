@@ -1,15 +1,14 @@
-import { addDays, eachDayOfInterval, formatISO, isSameDay, isWithinInterval } from "date-fns";
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
+import { addDays, formatISO, isSameDay, isWithinInterval } from "date-fns";
 import { useCallback, useMemo, useState } from "react";
 import FullCalendar from "../../../components/newCalendar/FullData/CalendarData";
 import {
-  mergeModule,
-  moduleOverlap,
-  toCalendarData,
+  checkOverlapModules, toCalendarData
 } from "../../../lib/calendar";
+import { getTargetDay } from "../../../lib/mouseEvent";
 import { isFormateurMissing } from "../../../lib/realData";
 import { useCalendar } from "./CalendarProvider";
 import { FormateurView } from "./CalendarViews";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 
 export default function CalendarFormateur({
   modules: originalModules,
@@ -27,6 +26,19 @@ export default function CalendarFormateur({
       true
     );
     checkOverlapModules(data);
+    // data.forEach((row) =>
+    //   row.events
+    //     .filter((event) => event.overlap)
+    //     .forEach(
+    //       (event) =>
+    //         (event.label = (
+    //           <WarningAmberIcon
+    //             color="error"
+    //             sx={{ verticalAlign: "middle" }}
+    //           />
+    //         ))
+    //     )
+    // );
     return data;
   }, [modules]);
 
@@ -136,36 +148,4 @@ export default function CalendarFormateur({
       }}
     />
   );
-}
-function getTargetDay(targetModule, { targetWidth, mouseOffsetX }) {
-  let targetDuration = targetModule.duration;
-  const dayOffset = Math.floor(mouseOffsetX / (targetWidth / targetDuration));
-  return addDays(targetModule.start, dayOffset);
-}
-
-function checkOverlapModules(data) {
-  for (let formateur of data) {
-    let newEvents = [];
-    for (let mod of formateur.events) {
-      let overlap = null;
-      for (let eventIndex in newEvents) {
-        let event = newEvents[eventIndex];
-        if (moduleOverlap(mod, event)) {
-          overlap = overlap
-            ? mergeModule(overlap, event)
-            : mergeModule(event, mod);
-          newEvents.splice(eventIndex, 1);
-        }
-      }
-      if (!overlap) newEvents.push(mod);
-      else {
-        overlap.duration = eachDayOfInterval(overlap).length;
-        overlap.label = (
-          <WarningAmberIcon color="error" sx={{ verticalAlign: "middle" }} />
-        );
-        newEvents.push(overlap);
-      }
-    }
-    formateur.events = newEvents;
-  }
 }

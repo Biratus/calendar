@@ -8,7 +8,6 @@ import { useCalendar } from "../../(components)/CalendarProvider";
 import { FiliereView } from "../../(components)/CalendarViews";
 import GlobalViewLink from "../../(components)/GlobalViewLink";
 import { useLegend } from "../../(components)/LegendProvider";
-import { LoadingBar } from "../../../../components/LoadingBar";
 import CalendarDetail from "../../../../components/newCalendar/SingleData/CalendarDetail";
 import { missingFormateurStyle } from "../../../../components/newCalendar/styles";
 import { useZoom } from "../../../../components/zoom/ZoomProvider";
@@ -49,6 +48,7 @@ export default function CalendarFiliere({ name, modules }) {
             eventHighlighted: isFormateurMissing,
             highlightedProps: missingFormateurStyle,
             onClick: openMenu,
+            label: (mod) => mod.name
           }}
         >
           <CalendarDetail
